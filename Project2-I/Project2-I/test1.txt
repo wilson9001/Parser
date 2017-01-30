@@ -1,0 +1,25 @@
+.
+,
+'a string'
+#A comment
+Schemes
+FactsRules
+::-
+Queries:
+IsInRoomAtDH('Snoopy',R,'M',H)
+#SchemesFactsRules<
+.
+#|comment >=
+wow|#
+Queries:
+IsInRoomAtDH('Snoopy',R,'M',H)?
+1Rules Facts Schemes
+&@Queries
+:
+#                     |
+'hello
+I am' $ A 'this has a
+return
+The end''s near'
+
+#|
