@@ -79,6 +79,7 @@ public:
 
 	tokenType checkKeywords();
 
+	list<token> getTokens();
 private:
 
 	string filename;

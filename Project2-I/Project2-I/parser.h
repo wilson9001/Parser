@@ -1,27 +1,34 @@
 #ifndef PARSER_H_
 #define PARSER_H_
 
+#include "scanner.h"
 #include "token.h"
+#include <list>
+#include "datalogProgram.h"
 
 class parser
 {
 public:
-	parser();
+	parser(list<token> parsingTokens);
 	~parser();
 
-	void match(token t)
-	{
+	void parse();
 
-	}
+	void match(tokenType testTokenType);
 
-	void parse()
-	{
+	void makeDatalogProgram();
 
-	}
+	token getToken();
+
+	//list<token> returnList(tokenType tokenToList);
+
+	void error(token badToken);
 
 private:
-	token current_token;
 
+	list<token> parsingTokens;
+	token tokenToParse;
+	datalogProgram myProgram;
 };
 
 #endif

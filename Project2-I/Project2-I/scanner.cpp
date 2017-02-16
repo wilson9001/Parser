@@ -735,3 +735,8 @@ tokenType scanner::checkKeywords()
 		return UNDEFINED;
 	}
 }
+
+list<token> scanner::getTokens()
+{
+	return tokenList;
+}

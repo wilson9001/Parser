@@ -110,12 +110,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="datalogProgram.h" />
+    <ClInclude Include="parameter.h" />
     <ClInclude Include="parser.h" />
+    <ClInclude Include="predicate.h" />
+    <ClInclude Include="rule.h" />
     <ClInclude Include="scanner.h" />
     <ClInclude Include="token.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="datalogProgram.cpp" />
+    <ClCompile Include="parameter.cpp" />
     <ClCompile Include="parser.cpp" />
+    <ClCompile Include="predicate.cpp" />
+    <ClCompile Include="rule.cpp" />
     <ClCompile Include="scanner.cpp" />
     <ClCompile Include="Source1.cpp" />
     <ClCompile Include="token.cpp" />

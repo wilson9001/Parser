@@ -1,6 +1,8 @@
 #include <iostream>
 #include <vector>
 #include "scanner.h"
+#include "parser.h"
+#include <list>
 
 using namespace std;
 
@@ -13,7 +15,9 @@ int main(/*int size , char* argv[]*/)
 
 	tokenScanner.scan();
 
-	//
+	parser tokenParser(tokenScanner.getTokens());
+
+	tokenParser.parse();
 
 	tokenScanner.printTokens();
 
