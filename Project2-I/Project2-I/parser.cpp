@@ -59,6 +59,29 @@ void parser::makeDatalogProgram()
 
 	//check for comments
 
+	checkComment(parsingTokens);
+
+	myProgram.addSchemes(myPredicate.makePredicate(parsingTokens));
+
+	checkComment(parsingTokens);
+
+	myProgram.addFacts(myPredicate.makePredicate(parsingTokens));
+
+	checkComment(parsingTokens);
+
+	myProgram.addRules(myRule.ruleList(parsingTokens));
+
+	checkComment(parsingTokens);
+
+	myProgram.addQueries(myPredicate.makePredicate(parsingTokens));
+
+	checkComment(parsingTokens);
+
+	if (parsingTokens.front().getType() != MYEOF)
+	{
+		error(parsingTokens.front());
+	}
+	/*
 	switch (parsingTokens.front().getType())
 	{
 	case SCHEMES:
@@ -79,6 +102,7 @@ void parser::makeDatalogProgram()
 	default:
 		error(parsingTokens.front());
 	}
+	*/
 	/* Goes to:
 	SCHEMES COLON scheme schemeList
 	FACTS COLON factList
@@ -337,5 +361,13 @@ void parser::printSchemes(list<predicate> predicateList)
 		parameterString = parameterString.substr(0, parameterString.length() - 1);
 
 		cout << parameterString << ")";
+	}
+}
+
+void parser::checkComment(list<token>& tokenList)
+{
+	while (tokenList.front().getType() == COMMENT)
+	{
+		tokenList.pop_front();
 	}
 }

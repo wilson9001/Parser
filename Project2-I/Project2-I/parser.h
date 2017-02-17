@@ -35,6 +35,8 @@ public:
 
 	void printSchemes(list<predicate> predicateList);
 
+	void checkComment(list<token> &tokenList);
+
 private:
 
 	list<token> parsingTokens;

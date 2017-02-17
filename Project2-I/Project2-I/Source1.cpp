@@ -9,7 +9,7 @@ using namespace std;
 int main(/*int size , char* argv[]*/)
 {//							argv[1]
 
-	string filename = "test8.txt";
+	string filename = "test9.txt";
 
 	scanner tokenScanner(filename);
 
