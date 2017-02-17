@@ -39,7 +39,12 @@ void scanner::scan()
 		while (nextToken != MYEOF)
 		{
 			token test(nextToken, word.str(), startLine);
-			tokenList.push_back(test);
+			//
+			if(test.getType() != COMMENT)
+			{
+				tokenList.push_back(test);
+			}
+			//tokenList.push_back(test);
 			nextToken = determineToken();
 		}
 

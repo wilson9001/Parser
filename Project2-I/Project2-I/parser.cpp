@@ -19,6 +19,8 @@ parser::~parser()
 
 void parser::parse()
 {
+
+
 	try
 	{
 		while (parsingTokens.front().getType() != MYEOF)
@@ -369,5 +371,15 @@ void parser::checkComment(list<token>& tokenList)
 	while (tokenList.front().getType() == COMMENT)
 	{
 		tokenList.pop_front();
+	}
+}
+
+void parser::purgeComments()
+{
+	list<token>::iterator it;
+
+	for (auto i : parsingTokens)
+	{
+		//i.getType() == COMMENT ? parsingTokens.erase(parsingTokens.begin() + i, parsingTokens.begin() + i )
 	}
 }

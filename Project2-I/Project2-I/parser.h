@@ -37,6 +37,8 @@ public:
 
 	void checkComment(list<token> &tokenList);
 
+	void purgeComments();
+
 private:
 
 	list<token> parsingTokens;
