@@ -24,6 +24,8 @@ public:
 
 	void checkComment(list<token> &tokenList);
 
+	list<predicate> getRulePredicates() { return predicateList; }
+
 private:
 
 	//*First predicate is headpredicate.

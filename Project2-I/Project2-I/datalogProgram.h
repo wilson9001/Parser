@@ -30,13 +30,15 @@ public:
 
 	list<rule> getRules() { return ruleList; }
 
+	set<string> getDomain() { return domain; }
+
 private:
 	list<predicate> factList;
 	list<predicate> schemeList;
 	list<predicate> queryList;
 	list<rule> ruleList;
-
 	set<string> domain;
+	//set<string> domain;
 };
 
 #endif

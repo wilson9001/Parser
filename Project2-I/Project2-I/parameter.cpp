@@ -36,10 +36,12 @@ list<parameter> parameter::parameterList(list<token>& tokenList, tokenType typeO
 		break;
 	case RULES:
 		//parameterList = makeParameters(tokenList, parameterList, RULES);
+		checkparameterlength(tokenList);
 		parameterList = ruleList(tokenList, parameterList);
 		break;
 	case QUERIES:
 		//parameterList = makeParameters(tokenList, parameterList, QUERIES);
+		checkparameterlength(tokenList);
 		parameterList = QueryParameterList(tokenList, parameterList);
 		break;
 	default:
@@ -83,32 +85,41 @@ list<parameter> parameter::makeParameters(list<token> &tokenList, list<parameter
 }
 */
 
-parameter parameter::Operator(list<token>& tokenList)
+void parameter::Operator(list<token>& tokenList)
 {
-	return parameter();
+	switch (tokenList.front().getType())
+	{
+	case ADD:
+	case MULTIPLY:
+		return;
+	default: error(tokenList.front());
+	}
 }
 
 list<parameter> parameter::idList(list<token>& tokenList, list<parameter> idParameterList)
 {
 	checkComment(tokenList);
 
-	parameter idParameter(tokenList.front().getLiteralValue(), dataType::ID);
+	parameter idParameter(tokenList.front().getLiteralValue(), iD);
 
 	idParameterList.push_back(idParameter);
 
-	match(tokenList, tokenType::ID);
+	match(tokenList, ID);
 
 	checkComment(tokenList);
 
 	if (tokenList.front().getType() == COMMA)
 	{
 		match(tokenList, COMMA);
+		checkComment(tokenList);
 		return idList(tokenList, idParameterList);
 	}
 
 	else
 	{
 		match(tokenList, RIGHT_PAREN);
+		checkComment(tokenList);
+
 		return idParameterList;
 	}
 	/*--comment
@@ -143,11 +154,11 @@ list<parameter> parameter::stringList(list<token>& tokenList, list<parameter> st
 {
 	checkComment(tokenList);
 
-	parameter stringParameter(tokenList.front().getLiteralValue(), dataType::STRING);
+	parameter stringParameter(tokenList.front().getLiteralValue(), sTRING);
 
 	stringParameterList.push_back(stringParameter);
 
-	match(tokenList, tokenType::STRING);
+	match(tokenList, STRING);
 
 	checkComment(tokenList);
 
@@ -162,6 +173,7 @@ list<parameter> parameter::stringList(list<token>& tokenList, list<parameter> st
 		match(tokenList,RIGHT_PAREN);
 		checkComment(tokenList);
 		match(tokenList, PERIOD);
+		checkComment(tokenList);
 
 		return stringParameterList;
 	}
@@ -191,26 +203,29 @@ list<parameter> parameter::QueryParameterList(list<token>& tokenList, list<param
 	switch (tokenList.front().getType())
 	{
 	case LEFT_PAREN:
+		match(tokenList, LEFT_PAREN);
 		queryParameterList.push_back(queryExpression.makeExpression(tokenList));//<be sure to check in here if the next tokens are comma or right paren.
 		return QueryParameterList(tokenList, queryParameterList);
 		/*match(tokenList, LEFT_PAREN);
 		queryParameterList.push_back(queryExpression.makeExpression(tokenList));
 		return queryParameters(tokenList, queryParameterList);
 		*/
-	case tokenType::STRING:
-		queryParameterList.push_back(queryParameter(tokenList, dataType::STRING));//<be sure to check in here if the next tokens are comma or right paren.
+	case STRING:
+		queryParameterList.push_back(queryParameter(tokenList, sTRING));//<be sure to check in here if the next tokens are comma or right paren.
 		/*parameterName = tokenList.front().getLiteralValue();
 		match(tokenList, tokenType::STRING);
 		parameterType = dataType::STRING;
 		break;
 		*/
-	case tokenType::ID:
-		queryParameterList.push_back(queryParameter(tokenList, dataType::ID));//<be sure to check in here if the next tokens are comma or right paren.
+		break;
+	case ID:
+		queryParameterList.push_back(queryParameter(tokenList, iD));//<be sure to check in here if the next tokens are comma or right paren.
 		/*parameterName = tokenList.front().getLiteralValue();
 		match(tokenList, tokenType::ID);
 		parameterType = dataType::ID;
 		break;
 		*/
+		break;
 	case COMMA:
 		checkComma(tokenList);
 		return QueryParameterList(tokenList, queryParameterList);
@@ -219,6 +234,7 @@ list<parameter> parameter::QueryParameterList(list<token>& tokenList, list<param
 		match(tokenList, RIGHT_PAREN);
 		checkComment(tokenList);
 		match(tokenList, Q_MARK);
+		checkComment(tokenList);
 		return queryParameterList;
 
 	default: error(tokenList.front());
@@ -237,16 +253,18 @@ parameter parameter::queryParameter(list<token>& tokenList, dataType typeOfParam
 
 	switch (typeOfParameter)
 	{
-	case dataType::ID:
+	case iD:
 		parameterValue = tokenList.front().getLiteralValue();
-		parameterType = dataType::ID;
-		match(tokenList, tokenType::ID);
+		parameterType = iD;
+		match(tokenList, ID);
+		checkComment(tokenList);
 		break;
 
-	case dataType::STRING:
+	case sTRING:
 		parameterValue = tokenList.front().getLiteralValue();
-		parameterType = dataType::STRING;
-		match(tokenList, tokenType::STRING);
+		parameterType = sTRING;
+		match(tokenList, STRING);
+		checkComment(tokenList);
 		break;
 
 	default:error(tokenList.front());
@@ -276,19 +294,20 @@ list<parameter> parameter::ruleList(list<token>& tokenList, list<parameter> rule
 	switch (tokenList.front().getType())
 	{
 	case LEFT_PAREN:
+		match(tokenList, LEFT_PAREN);
 		ruleParameterList.push_back(ruleExpression.makeExpression(tokenList));//<be sure to check in here if the next tokens are comma or right paren.
 		return ruleList(tokenList, ruleParameterList);
 
-	case tokenType::STRING:
-		ruleParameterList.push_back(queryParameter(tokenList, dataType::STRING));//<be sure to check in here if the next tokens are comma or right paren.
+	case STRING:
+		ruleParameterList.push_back(queryParameter(tokenList, sTRING));//<be sure to check in here if the next tokens are comma or right paren.
 		break;
-	case tokenType::ID:
-		ruleParameterList.push_back(queryParameter(tokenList, dataType::ID));//<be sure to check in here if the next tokens are comma or right paren.
+	case ID:
+		ruleParameterList.push_back(queryParameter(tokenList, iD));//<be sure to check in here if the next tokens are comma or right paren.
 		break;
 
 	case COMMA:
 		checkComma(tokenList);
-		return QueryParameterList(tokenList, ruleParameterList);
+		return /*QueryParameterList*/ruleList(tokenList, ruleParameterList);
 
 	case RIGHT_PAREN:
 		match(tokenList, RIGHT_PAREN);
@@ -307,12 +326,45 @@ void parameter::checkComma(list<token>& tokenList)
 
 	checkComment(tokenList);
 
-	if (tokenList.front().getType() != tokenType::ID && tokenList.front().getType() != tokenType::STRING && tokenList.front().getType() != LEFT_PAREN)
+	if (tokenList.front().getType() != ID && tokenList.front().getType() != STRING && tokenList.front().getType() != LEFT_PAREN)
 	{
 		error(tokenList.front());
 	}
 
 	checkComment(tokenList);
+}
+
+void parameter::checkExpressionEnd(list<token>& tokenList)
+{
+	checkComment(tokenList);
+
+	if (tokenList.front().getType() != COMMA && tokenList.front().getType() != RIGHT_PAREN && tokenList.front().getType() != ADD && tokenList.front().getType() != MULTIPLY)
+	{
+		error(tokenList.front());
+	}
+}
+
+void parameter::checkExpressionParameter(list<token>& tokenList)
+{
+	switch (tokenList.front().getType())
+	{
+	case ID:
+	case STRING:
+		return;
+	default: error(tokenList.front());
+	}
+}
+
+void parameter::checkparameterlength(list<token>& tokenList)
+{
+	switch (tokenList.front().getType())
+	{
+	case ID:
+	case STRING:
+	case LEFT_PAREN:
+		return;
+	default: error(tokenList.front());
+	}
 }
 
 
@@ -322,7 +374,7 @@ expression::expression()
 {
 }
 
-expression::expression(string expressionString):parameter(expressionString, dataType::EXPRESSION)
+expression::expression(string expressionString):parameter(expressionString, eXPRESSION)
 {
 }
 
@@ -338,27 +390,6 @@ expression::~expression()
 
 expression expression::makeExpression(list<token>& tokenList)
 {
-	/*
-	string parameterValue;
-	dataType parameterType;
-
-	switch (tokenList.front().getType())
-	{
-	case LEFT_PAREN:
-		match(tokenList, LEFT_PAREN);
-		leftParameter = makeExpression(tokenList);
-		break;
-
-	case tokenType::ID:
-		leftParameter = parameter(tokenList.front().getLiteralValue(), dataType::ID);
-		match(tokenList, ID);
-		break;
-
-	case tokenType::STRING:
-		leftParameter = parameter
-	}
-	*/
-
 	stringstream expressionString;
 
 	expression tempExpression;
@@ -369,6 +400,7 @@ expression expression::makeExpression(list<token>& tokenList)
 	//{
 		if (tokenList.front().getType() == LEFT_PAREN)
 		{
+			checkComment(tokenList);
 			match(tokenList, LEFT_PAREN);
 			checkComment(tokenList);
 
@@ -379,17 +411,22 @@ expression expression::makeExpression(list<token>& tokenList)
 
 		else
 		{
-			//checkLeftParameter();
+			checkExpressionParameter(tokenList);
 			expressionString << tokenList.front().getLiteralValue();
 			tokenList.pop_front();
 		}
 
-		//checkOperator()
+		checkComment(tokenList);
+
+		Operator(tokenList);
 		expressionString << tokenList.front().getLiteralValue();
 		tokenList.pop_front();
 
+		checkComment(tokenList);
+
 		if (tokenList.front().getType() == LEFT_PAREN)
 		{
+			checkComment(tokenList);
 			match(tokenList, LEFT_PAREN);
 			checkComment(tokenList);
 
@@ -399,21 +436,16 @@ expression expression::makeExpression(list<token>& tokenList)
 		}
 
 		else
-		{	//checkRightparameter();
+		{
+			checkExpressionParameter(tokenList);
 			expressionString << tokenList.front().getLiteralValue();
 			tokenList.pop_front();
 		}
 	//}
+		checkComment(tokenList);
 		match(tokenList, RIGHT_PAREN);
 		checkComment(tokenList);
+		checkExpressionEnd(tokenList);
 
 	return expression(expressionString.str());
-}
-
-void expression::validateExpression(list<token> tokenList)
-{
-	switch (tokenList.front().getType())
-	{
-
-	}
 }

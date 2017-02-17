@@ -2,8 +2,14 @@
 #include "token.h"
 #include "scanner.h"
 #include <iostream>
+#include <map>
 
-parser::parser(list<token> parsingTokens):parsingTokens(parsingTokens),tokenToParse(getToken())
+typedef map<tokenType, string> tokenMap;
+
+using namespace std;
+using std::cout;
+
+parser::parser(list<token> parsingTokens):parsingTokens(parsingTokens)
 {
 }
 
@@ -15,13 +21,7 @@ void parser::parse()
 {
 	try
 	{
-		/*for (auto x : parsingTokens)
-		{
-			datalogProgram(getToken());
-		}
-		*/
-
-		while (!parsingTokens.front().getType() != MYEOF)
+		while (parsingTokens.front().getType() != MYEOF)
 		{
 			makeDatalogProgram();
 		}
@@ -29,8 +29,16 @@ void parser::parse()
 
 	catch(token badToken)
 	{
-		cout << "Failure!\n\t(" << badToken.getType() << ", \"" << badToken.getLiteralValue() << "\"," << badToken.getLineNumber() << ")";
+		tokenMap DEEZMAPS;
+
+		DEEZMAPS = { { COMMA, "COMMA" },{ PERIOD ,"PERIOD" },{ Q_MARK,"Q_MARK" },{ LEFT_PAREN,"LEFT_PAREN" },{ RIGHT_PAREN,"RIGHT_PAREN" },{ COLON, "COLON" },{ COLON_DASH,"COLON_DASH" },{ MULTIPLY,"MULTIPLY" },{ ADD,"ADD" },{ SCHEMES,"SCHEMES" },{ FACTS,"FACTS" },{ RULES,"RULES" },{ QUERIES,"QUERIES" },{ ID,"ID" },{ STRING,"STRING" },{ COMMENT,"COMMENT" },{ WHITESPACE,"WHITESPACE" },{ UNDEFINED,"UNDEFINED" },{ MYEOF,"EOF" } };
+
+		cout << "Failure!\n  (" << DEEZMAPS[badToken.getType()] << ",\"" << badToken.getLiteralValue() << "\"," << badToken.getLineNumber() << ")";
+
+		return;
 	}
+
+	printDatalogProgram();
 	//wrap datalogProgram in try-catch block.
 }
 
@@ -39,12 +47,7 @@ void parser::parse()
 //*Else the token is thrown.
 void parser::match(tokenType testTokenType)
 {
-	tokenToParse.getType() == testTokenType ? tokenToParse = getToken() : error(tokenToParse);
-	/*if (token == t)
-		token = getToken();
-
-	else
-		error();*/
+	parsingTokens.front().getType() == testTokenType ? parsingTokens.pop_front() : error(parsingTokens.front());
 }
 
 //*This function represents the start position for all grammars.
@@ -56,7 +59,7 @@ void parser::makeDatalogProgram()
 
 	//check for comments
 
-	switch (tokenToParse.getType())
+	switch (parsingTokens.front().getType())
 	{
 	case SCHEMES:
 		myProgram.addSchemes(myPredicate.makePredicate(parsingTokens));
@@ -71,10 +74,10 @@ void parser::makeDatalogProgram()
 		myProgram.addQueries(myPredicate.makePredicate(parsingTokens));
 		break;
 	case COMMENT:
-		tokenToParse = getToken();
+		parsingTokens.pop_front();
 		return;
 	default:
-		error(tokenToParse);
+		error(parsingTokens.front());
 	}
 	/* Goes to:
 	SCHEMES COLON scheme schemeList
@@ -95,4 +98,143 @@ token parser::getToken()
 void parser::error(token badToken)
 {
 	throw badToken;
+}
+
+void parser::printDatalogProgram()
+{
+	list<predicate> predicateList = myProgram.getSchemes();
+	cout << "Success!\nSchemes(" << predicateList.size() << "):";
+
+	for (auto x : predicateList)
+	{
+		cout << "\n  " << x.getPredicateName() << "(";
+		list<parameter> parameterList = x.getPredicateParameters();
+
+		stringstream parameters;
+
+		for (auto y : parameterList)
+		{
+			parameters << y.getParameterValue() << ",";
+		}
+
+		string parameterString = parameters.str();
+
+		parameterString = parameterString.substr(0, parameterString.length() - 1);
+
+		cout << parameterString << ")";
+	}
+
+	predicateList = myProgram.getFacts();
+
+	cout << "\nFacts(" << predicateList.size() << "):";
+
+	for (auto x : predicateList)
+	{
+		cout << "\n  " << x.getPredicateName() << "(";
+		list<parameter> parameterList = x.getPredicateParameters();
+
+		stringstream parameters;
+
+		for (auto y : parameterList)
+		{
+			parameters << y.getParameterValue() << ",";
+		}
+
+		string parameterString = parameters.str();
+
+		parameterString = parameterString.substr(0, parameterString.length() - 1);
+
+		cout << parameterString << ").";
+	}
+
+	list<rule> ruleList;
+	ruleList = myProgram.getRules();
+
+	cout << "\nRules(" << ruleList.size() << "):";
+
+	for (auto x : ruleList)
+	{
+		cout << "\n  ";
+
+		list<predicate> rulePredicates = x.getRulePredicates();
+
+		cout << rulePredicates.front().getPredicateName() << "(";
+
+		list<parameter> predicateParameters = rulePredicates.front().getPredicateParameters();
+
+		rulePredicates.pop_front();
+
+		stringstream parameterString;
+
+		for (auto y : predicateParameters)
+		{
+			parameterString << y.getParameterValue() << ",";
+		}
+
+		string parameterstr = parameterString.str();
+
+		parameterstr = parameterstr.substr(0, parameterstr.length() - 1);
+
+		cout << parameterstr << ") :- ";
+
+		stringstream predicateString;
+
+		for (auto y : rulePredicates)
+		{
+			predicateString << y.getPredicateName() << "(";
+
+			list<parameter> predicateParameters = y.getPredicateParameters();
+
+			stringstream parameterString;
+			for (auto z : predicateParameters)
+			{
+				parameterString << z.getParameterValue() << ",";
+			}
+
+			string parameterStr = parameterString.str();
+
+			parameterStr = parameterStr.substr(0, parameterStr.length() - 1);
+
+			predicateString << parameterStr << "),";
+		}
+
+		string predicatestr = predicateString.str();
+
+		predicatestr = predicatestr.substr(0, predicatestr.length() - 1);
+
+		cout << predicatestr << ".";
+	}
+
+	predicateList = myProgram.getQueries();
+
+	cout << "\nQueries(" << predicateList.size() << "):";
+
+	for (auto x : predicateList)
+	{
+		cout << "\n  " << x.getPredicateName() << "(";
+
+		list<parameter>predicateParameters = x.getPredicateParameters();
+
+		stringstream parameterString;
+
+		for (auto y : predicateParameters)
+		{
+			parameterString << y.getParameterValue() << ",";
+		}
+
+		string parameterStr = parameterString.str();
+
+		parameterStr = parameterStr.substr(0, parameterStr.length() - 1);
+
+		cout << parameterStr << ")?";
+	}
+
+	set<string> domainList = myProgram.getDomain();
+
+	cout << "\nDomain(" << domainList.size() << "):";
+
+	for (auto x : domainList)
+	{
+		cout << "\n  " << x;
+	}
 }

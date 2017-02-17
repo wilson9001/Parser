@@ -2,6 +2,7 @@
 #define PREDICATE_H_
 
 #include "token.h"
+#include "parameter.h"
 
 class predicate
 {

@@ -4,7 +4,6 @@ datalogProgram::datalogProgram()
 {
 }
 
-
 datalogProgram::~datalogProgram()
 {
 }
@@ -14,6 +13,13 @@ void datalogProgram::addFacts(list<predicate> factList)
 	for (auto x : factList)
 	{
 		this->factList.push_back(x);
+
+		list<parameter> predicateParameters = x.getPredicateParameters();
+
+		for (auto y : predicateParameters)
+		{
+			domain.insert(y.getParameterValue());
+		}
 	}
 }
 

@@ -30,9 +30,15 @@ rule rule::makeRule(list<token>& tokenList)
 
 	match(tokenList, COLON_DASH);
 
+	checkComment(tokenList);
+
 	rulePredicateList = rulePredicate.predicateList(tokenList, rulePredicateList);
 
+	checkComment(tokenList);
+
 	match(tokenList, PERIOD);
+
+	checkComment(tokenList);
 
 	rule tempRule(rulePredicateList);
 
@@ -41,6 +47,8 @@ rule rule::makeRule(list<token>& tokenList)
 
 list<rule> rule::ruleList(list<token>& tokenList)
 {
+	checkComment(tokenList);
+
 	match(tokenList,RULES);
 
 	checkComment(tokenList);

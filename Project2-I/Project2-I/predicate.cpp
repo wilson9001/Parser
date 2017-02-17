@@ -75,12 +75,16 @@ predicate predicate::headPredicate(list<token>& tokenList)
 {
 	string predicateName = tokenList.front().getLiteralValue();
 
-	match(tokenList, tokenType::ID);
+	checkComment(tokenList);
+
+	match(tokenList, ID);
 
 	checkComment(tokenList);
 
 	match(tokenList, LEFT_PAREN);
-	//
+
+	checkComment(tokenList);
+	
 	list<parameter> parameters;
 
 	parameter ruleParameter;
@@ -102,7 +106,7 @@ predicate predicate::scheme(list<token> &tokenList)
 	token PredicateName = tokenList.front();
 	//predicateName = tokenList.front();
 
-	match(tokenList, tokenType::ID);
+	match(tokenList, ID);
 
 	checkComment(tokenList);
 
@@ -119,11 +123,12 @@ predicate predicate::scheme(list<token> &tokenList)
 
 	checkComment(tokenList);
 
-	match(tokenList, RIGHT_PAREN);
+	//match(tokenList, RIGHT_PAREN);
 
 	checkComment(tokenList);
 	//predicate newScheme(predicateName.getLiteralValue(), parameterList)
 
+	return predicate(PredicateName.getLiteralValue(), parameterList);
 	//return newScheme;
 
 	/*
@@ -188,7 +193,7 @@ predicate predicate::fact(list<token>& tokenList)
 {
 	token predicateName = tokenList.front();
 
-	match(tokenList,tokenType::ID);
+	match(tokenList,ID);
 
 	checkComment(tokenList);
 
@@ -232,7 +237,7 @@ predicate predicate::query(list<token>& tokenList)
 {
 	token predicateName = tokenList.front();
 
-	match(tokenList, tokenType::ID);
+	match(tokenList,ID);
 
 	checkComment(tokenList);
 
@@ -293,7 +298,7 @@ predicate predicate::makeRulePredicate(list<token> &tokenList)
 {
 	token predicateName = tokenList.front();
 
-	match(tokenList, tokenType::ID);
+	match(tokenList, ID);
 
 	checkComment(tokenList);
 

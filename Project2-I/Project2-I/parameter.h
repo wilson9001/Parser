@@ -4,12 +4,14 @@
 #include <iostream>
 #include <sstream>
 #include <exception>
+#include "token.h"
+#include <list>
 
 using namespace std;
 
-enum dataType{STRING,ID,EXPRESSION};
+enum dataType{sTRING,iD,eXPRESSION};
 
-//class expression;
+class expression;
 
 class parameter
 {
@@ -22,13 +24,13 @@ public:
 
 	//IDLIst, stringlist, querylist need to go here...
 
-	list<parameter> makeParameters(list<token> &tokenList, list<parameter> parameterList, tokenType typeOfPredicate);
+	//list<parameter> makeParameters(list<token> &tokenList, list<parameter> parameterList, tokenType typeOfPredicate);
 	//list<parameter> makeParameter(list<token> &tokenList, tokenType typeOfPredicate);
 
 	list<parameter> parameterList(list<token> &tokenList, tokenType typeOfPredicate);
 	//list<parameter> parameterList(list<token> &tokenList);
 
-	parameter Operator(list<token> &tokenList);
+	void Operator(list<token> &tokenList);
 
 	list<parameter> idList(list<token> &tokenList, list<parameter> idParameterList);
 
@@ -52,6 +54,13 @@ public:
 
 	void checkComma(list<token> &tokenList);
 
+	void checkExpressionEnd(list<token> &tokenList);
+
+	void checkExpressionParameter(list<token> &tokenList);
+
+	//Includes expressions
+	void checkparameterlength(list<token> &tokenList);
+
 private:
 	string parameterValue;
 	dataType parameterType;
@@ -68,7 +77,5 @@ public:
 	//string getParameterValue();
 
 	expression makeExpression(list<token> &tokenList);
-
-	void validateExpression(list<token> tokenList);
 };
 #endif

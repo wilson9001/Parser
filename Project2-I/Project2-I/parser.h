@@ -24,10 +24,12 @@ public:
 
 	void error(token badToken);
 
+	void printDatalogProgram();
+
 private:
 
 	list<token> parsingTokens;
-	token tokenToParse;
+	//token tokenToParse;
 	datalogProgram myProgram;
 };
 
