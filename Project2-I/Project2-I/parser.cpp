@@ -104,7 +104,10 @@ void parser::printDatalogProgram()
 {
 	list<predicate> predicateList = myProgram.getSchemes();
 	cout << "Success!\nSchemes(" << predicateList.size() << "):";
-
+	
+	printSchemes(predicateList);
+	//
+	/*
 	for (auto x : predicateList)
 	{
 		cout << "\n  " << x.getPredicateName() << "(";
@@ -123,16 +126,21 @@ void parser::printDatalogProgram()
 
 		cout << parameterString << ")";
 	}
+	*/
+	//
 
 	predicateList = myProgram.getFacts();
 
+	printFacts(predicateList);
+	//
+	/*
 	cout << "\nFacts(" << predicateList.size() << "):";
 
 	for (auto x : predicateList)
 	{
 		cout << "\n  " << x.getPredicateName() << "(";
 		list<parameter> parameterList = x.getPredicateParameters();
-
+		//
 		stringstream parameters;
 
 		for (auto y : parameterList)
@@ -145,8 +153,10 @@ void parser::printDatalogProgram()
 		parameterString = parameterString.substr(0, parameterString.length() - 1);
 
 		cout << parameterString << ").";
+		//
 	}
-
+	*/
+	//
 	list<rule> ruleList;
 	ruleList = myProgram.getRules();
 
@@ -185,7 +195,9 @@ void parser::printDatalogProgram()
 
 			list<parameter> predicateParameters = y.getPredicateParameters();
 
-			stringstream parameterString;
+			predicateString << printRulePredicateParameters(predicateParameters);
+			//stringstream parameterString;
+			/*
 			for (auto z : predicateParameters)
 			{
 				parameterString << z.getParameterValue() << ",";
@@ -194,8 +206,9 @@ void parser::printDatalogProgram()
 			string parameterStr = parameterString.str();
 
 			parameterStr = parameterStr.substr(0, parameterStr.length() - 1);
+			*/
+			//predicateString << parameterStr << "),";
 
-			predicateString << parameterStr << "),";
 		}
 
 		string predicatestr = predicateString.str();
@@ -236,5 +249,93 @@ void parser::printDatalogProgram()
 	for (auto x : domainList)
 	{
 		cout << "\n  " << x;
+	}
+}
+
+string parser::printRulePredicateParameters(list<parameter> predicateParameter)
+{
+	stringstream parameterString;
+
+	for (auto z : predicateParameter)
+	{
+		parameterString << z.getParameterValue() << ",";
+	}
+
+	//return parameterString.str().substr(0, parameterString.str().size() - 1);
+	
+	string parameterStr = parameterString.str().substr(0, parameterString.str().size() - 1);
+
+	parameterStr += "),";
+
+	return parameterStr;
+	//parameterStr = parameterStr.substr(0, parameterStr.length() - 1);
+
+	//predicateString << parameterStr << "),";
+	
+}
+
+void parser::printFacts(list<predicate> predicateList)
+{
+	cout << "\nFacts(" << predicateList.size() << "):";
+
+	for (auto x : predicateList)
+	{
+		cout << "\n  " << x.getPredicateName() << "(";
+		list<parameter> parameterList = x.getPredicateParameters();
+
+		printFactParameters(parameterList);
+		//
+		/*
+		stringstream parameters;
+
+		for (auto y : parameterList)
+		{
+			parameters << y.getParameterValue() << ",";
+		}
+
+		string parameterString = parameters.str();
+
+		parameterString = parameterString.substr(0, parameterString.length() - 1);
+
+		cout << parameterString << ").";
+		*/
+	}
+}
+
+void parser::printFactParameters(list<parameter> parameterList)
+{
+	stringstream parameters;
+
+	for (auto y : parameterList)
+	{
+		parameters << y.getParameterValue() << ",";
+	}
+
+	string parameterString = parameters.str();
+
+	parameterString = parameterString.substr(0, parameterString.length() - 1);
+
+	cout << parameterString << ").";
+}
+
+void parser::printSchemes(list<predicate> predicateList)
+{
+	for (auto x : predicateList)
+	{
+		cout << "\n  " << x.getPredicateName() << "(";
+		list<parameter> parameterList = x.getPredicateParameters();
+
+		stringstream parameters;
+
+		for (auto y : parameterList)
+		{
+			parameters << y.getParameterValue() << ",";
+		}
+
+		string parameterString = parameters.str();
+
+		parameterString = parameterString.substr(0, parameterString.length() - 1);
+
+		cout << parameterString << ")";
 	}
 }

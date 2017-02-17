@@ -5,6 +5,7 @@
 #include "token.h"
 #include <list>
 #include "datalogProgram.h"
+#include "parameter.h"
 
 class parser
 {
@@ -25,6 +26,14 @@ public:
 	void error(token badToken);
 
 	void printDatalogProgram();
+
+	string printRulePredicateParameters(list<parameter> predicateParameter);
+
+	void printFacts(list<predicate> predicateList);
+
+	void printFactParameters(list<parameter> parameterList);
+
+	void printSchemes(list<predicate> predicateList);
 
 private:
 
