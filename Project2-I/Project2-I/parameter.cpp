@@ -392,6 +392,8 @@ expression expression::makeExpression(list<token>& tokenList)
 {
 	stringstream expressionString;
 
+	expressionString << "(";//////////////
+
 	expression tempExpression;
 
 	//validateExpression(tokenList);
@@ -403,6 +405,8 @@ expression expression::makeExpression(list<token>& tokenList)
 			checkComment(tokenList);
 			match(tokenList, LEFT_PAREN);
 			checkComment(tokenList);
+
+			//expressionString << "(";
 
 			expression tempExpression2 = tempExpression.makeExpression(tokenList);
 
@@ -430,6 +434,8 @@ expression expression::makeExpression(list<token>& tokenList)
 			match(tokenList, LEFT_PAREN);
 			checkComment(tokenList);
 
+			//expressionString << "(";
+
 			expression tempExpression2 = tempExpression.makeExpression(tokenList);
 
 			expressionString << tempExpression2.getParameterValue();
@@ -444,6 +450,7 @@ expression expression::makeExpression(list<token>& tokenList)
 	//}
 		checkComment(tokenList);
 		match(tokenList, RIGHT_PAREN);
+		expressionString << ")";
 		checkComment(tokenList);
 		checkExpressionEnd(tokenList);
 
