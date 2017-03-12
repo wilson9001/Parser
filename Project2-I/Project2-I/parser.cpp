@@ -40,7 +40,7 @@ void parser::parse()
 		return;
 	}
 
-	printDatalogProgram();
+	//printDatalogProgram();
 	//wrap datalogProgram in try-catch block.
 }
 
@@ -130,7 +130,7 @@ void parser::printDatalogProgram()
 {
 	list<predicate> predicateList = myProgram.getSchemes();
 	cout << "Success!\nSchemes(" << predicateList.size() << "):";
-	
+
 	printSchemes(predicateList);
 	//
 	/*
@@ -288,7 +288,7 @@ string parser::printRulePredicateParameters(list<parameter> predicateParameter)
 	}
 
 	//return parameterString.str().substr(0, parameterString.str().size() - 1);
-	
+
 	string parameterStr = parameterString.str().substr(0, parameterString.str().size() - 1);
 
 	parameterStr += "),";
@@ -297,7 +297,7 @@ string parser::printRulePredicateParameters(list<parameter> predicateParameter)
 	//parameterStr = parameterStr.substr(0, parameterStr.length() - 1);
 
 	//predicateString << parameterStr << "),";
-	
+
 }
 
 void parser::printFacts(list<predicate> predicateList)

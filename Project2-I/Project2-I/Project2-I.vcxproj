@@ -114,23 +114,31 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="database.h" />
     <ClInclude Include="datalogProgram.h" />
     <ClInclude Include="parameter.h" />
     <ClInclude Include="parser.h" />
     <ClInclude Include="predicate.h" />
+    <ClInclude Include="relation.h" />
     <ClInclude Include="rule.h" />
     <ClInclude Include="scanner.h" />
+    <ClInclude Include="scheme.h" />
     <ClInclude Include="token.h" />
+    <ClInclude Include="Tuple.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="database.cpp" />
     <ClCompile Include="datalogProgram.cpp" />
     <ClCompile Include="parameter.cpp" />
     <ClCompile Include="parser.cpp" />
     <ClCompile Include="predicate.cpp" />
+    <ClCompile Include="relation.cpp" />
     <ClCompile Include="rule.cpp" />
     <ClCompile Include="scanner.cpp" />
+    <ClCompile Include="scheme.cpp" />
     <ClCompile Include="Source1.cpp" />
     <ClCompile Include="token.cpp" />
+    <ClCompile Include="Tuple.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
