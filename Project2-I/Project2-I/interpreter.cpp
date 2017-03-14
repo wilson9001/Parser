@@ -38,7 +38,7 @@ void interpreter::evaluateQueries()
 		answerQuery(x);
 	}
 
-	//In the print results function, we will be able to go through the query vector and pull out the result relation from the map for each result, get the size of the set of tuples, and then iterate through the set.
+	printQueryResults();
 }
 
 void interpreter::answerQuery(predicate queryToAnswer)
@@ -107,4 +107,40 @@ string interpreter::queryMapKeyGenerator(predicate queryToStringify)
 	finalKey += ")?";
 
 	return finalKey;
+}
+
+//*Iterates through the query vector and pulls out the result relation from the map for each query,
+//get the size of the set of tuples, and then iterate through the set.
+void interpreter::printQueryResults()
+{
+	for (predicate x : queryList)
+	{
+		queryResults << x.getPredicateName() << "(";
+
+		addQueryParameters(x.getPredicateParameters());
+
+		queryResults << ")?";
+	}
+}
+
+void interpreter::addQueryParameters(list<parameter> queryParameters)
+{
+	stringstream tempStream;
+
+	for (auto x : queryParameters)
+	{
+		switch (x.getParameterType())
+		{
+		case iD:
+			tempStream << x.getParameterValue() << ",";
+			break;
+
+			//must be string
+		default:
+			tempStream << "'" << x.getParameterValue() << "',";
+		}
+	}
+	string tempString = tempStream.str();
+
+	 queryResults << tempString.substr(0, tempString.size() - 1);
 }

@@ -27,11 +27,15 @@ public:
 
 	string queryMapKeyGenerator(predicate queryToStringify);
 
+	void printQueryResults();
+
+	void addQueryParameters(list<parameter> queryParameters);
+
 private:
 	database myDatabase;
 	list<predicate> queryList;
 	list<rule> ruleList;
-	//stringstream queryResults; <--may not need this...
+	stringstream queryResults;
 
 	//Will store relation results in here to make sure all the results are organized properly. Will use existing queryList to order the printing out of them. Key will have to be entire query, since the scheme can be queried in multiple ways, and each way will need their own result relation mapped.
 	unordered_map<string, relation> relationResults;
