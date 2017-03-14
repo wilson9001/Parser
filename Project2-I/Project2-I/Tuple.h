@@ -5,6 +5,7 @@
 
 using namespace std;
 
+//Contains
 class Tuple :
 	public vector<string>
 {

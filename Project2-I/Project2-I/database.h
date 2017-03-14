@@ -3,6 +3,8 @@
 
 #include <map>
 #include "relation.h"
+#include <list>
+#include "parameter.h"
 
 using namespace std;
 
@@ -11,6 +13,10 @@ class database
 public:
 	database();
 	~database();
+
+	void addRelation(string relationName, list<parameter> parameterList);
+
+	void addTuples();
 
 private:
 
