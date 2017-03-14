@@ -5,7 +5,7 @@
 
 using namespace std;
 
-//Contains
+//*Vector of strings used to hold instantiated schemes.
 class Tuple :
 	public vector<string>
 {
