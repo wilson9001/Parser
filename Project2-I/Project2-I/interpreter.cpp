@@ -1,5 +1,4 @@
 #include "interpreter.h"
-#include <iostream>
 
 using namespace std;
 
@@ -24,11 +23,23 @@ void interpreter::createDataBase(datalogProgram & dataLog)
 	//create tuples
 	for (predicate x : factList)
 	{
-
+		myDatabase.addTuples(x.getPredicateName(), x.getPredicateParameters());
 	}
 
 	queryList = dataLog.getQueries();
 
 	ruleList = dataLog.getRules();
+}
+
+void interpreter::evaluateQueries()
+{
+	for (predicate x : queryList)
+	{
+
+	}
+}
+
+void interpreter::answerQuery(predicate queryToAnswer)
+{
 }
 

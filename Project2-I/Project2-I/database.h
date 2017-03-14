@@ -16,7 +16,9 @@ public:
 
 	void addRelation(string relationName, list<parameter> parameterList);
 
-	void addTuples();
+	void addTuples(string relationName, list<parameter> tupleValues);
+
+
 
 private:
 

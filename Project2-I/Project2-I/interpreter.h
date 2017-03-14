@@ -7,6 +7,7 @@
 #include "rule.h"
 #include "datalogProgram.h"
 #include <list>
+#include <sstream>
 
 class interpreter
 {
@@ -18,10 +19,15 @@ public:
 
 	void createDataBase(datalogProgram &dataLog);
 
+	void evaluateQueries();
+
+	void answerQuery(predicate queryToAnswer);
+
 private:
 	database myDatabase;
 	list<predicate> queryList;
 	list<rule> ruleList;
+	stringstream queryResults;
 };
 
 #endif

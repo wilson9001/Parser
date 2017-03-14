@@ -18,3 +18,14 @@ void database::addRelation(string relationName, list<parameter> parameterList)
 {
 	relationMap.insert(pair<string,relation>(relationName, relation(relationName, parameterList)));
 }
+
+void database::addTuples(string relationName, list<parameter> tupleValues)
+{
+	Tuple tempTuple;
+	for (parameter x : tupleValues)
+	{
+		tempTuple.push_back(x.getParameterValue());
+	}
+
+	relationMap[relationName].addTuple(tempTuple);
+}
