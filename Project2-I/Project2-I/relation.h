@@ -24,6 +24,7 @@ public:
 	relation selectID(string IdString, int positionInTuple);
 
 	//*Will take existing vector of columns to project and reduce tuple vectors down to the appropriate indexes/columns.
+	//*If the entire query was absolutes, then there should be no numbers in the projection vector, and since there can only be one answer that's K.
 	relation project();
 
 	//*Will take vector of projectNames and rename the still existing columns after project to be the appropriate name.

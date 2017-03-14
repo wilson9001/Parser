@@ -76,5 +76,35 @@ void interpreter::answerQuery(predicate queryToAnswer)
 	//using project function, reduce columns in indexes specified
 	//rename columns to list of project variables
 	tempRelation.rename();
+
 	//we now have the final relation result for this query. We need to do an insert into the unordered map with the key as the whole query string and the relational result as the mapped value. Since running the same query twice should produce the same results, it doesn't matter if an insert is ignored if run again.
+	relationResults.insert(pair<string, relation>(queryMapKeyGenerator(queryToAnswer), tempRelation));
+}
+
+//*Turns entire query statement into a string to be used in the map of result relations, and in printing queries in the printResults function.
+string interpreter::queryMapKeyGenerator(predicate queryToStringify)
+{
+	stringstream keyBuilder;
+
+	keyBuilder << queryToStringify.getPredicateName() << "(";
+
+	for (parameter p : queryToStringify.getPredicateParameters())
+	{
+		switch (p.getParameterType())
+		{
+		case iD:
+			keyBuilder << p.getParameterValue() << ",";
+			break;
+
+			//Must be string...
+		default:
+			keyBuilder << "'" << p.getParameterValue() << "',";
+		}
+	}
+
+	string finalKey = keyBuilder.str().substr(0, keyBuilder.str().length() - 1);
+
+	finalKey += ")?";
+
+	return finalKey;
 }
