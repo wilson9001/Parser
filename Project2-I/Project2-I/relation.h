@@ -15,14 +15,19 @@ public:
 
 	void addTuple(Tuple newTuple) { relationTuples.insert(newTuple); }
 
+	//*Used on internal data in temp relations to answer queries.
+	//*Needs to redo set of tuples to only have ones that qualify with this query.
+	relation selectAbsolute(string AbsoluteString, int positionInTuple);
+	//*Used on internal data in temp relations to answer queries.
+	//*May only add to project vector if ID is new. If it isn't new, then it will select
+	//for where the column numbers with this ID equal each other.
+	relation selectID(string IdString, int positionInTuple);
 
-	relation selectAbsolute();
+	//*Will take existing vector of columns to project and reduce tuple vectors down to the appropriate indexes/columns.
+	relation project();
 
-	relation selectID();
-
-	relation project(vector<int> columnsToProject);
-
-	void rename(vector<string> newNames);
+	//*Will take vector of projectNames and rename the still existing columns after project to be the appropriate name.
+	void rename();
 
 private:
 	//*Name of this relation
@@ -32,6 +37,10 @@ private:
 	scheme relationScheme;
 	//*Actual instantiations of the relation outlined in the scheme
 	set<Tuple> relationTuples;
+	//*Used in temporary relations to answer queries. Used to rename relationScheme.
+	vector<string> projectNames;
+	//*Used in temporary relations to answer queries. Used to reduce Tuples down to specified indexes corresponding with specified columns.
+	vector<int> columnsToProject;
 };
 
 #endif

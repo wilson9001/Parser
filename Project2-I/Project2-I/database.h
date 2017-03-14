@@ -18,7 +18,7 @@ public:
 
 	void addTuples(string relationName, list<parameter> tupleValues);
 
-
+	relation getRelation(string relationName) { return relationMap[relationName]; }
 
 private:
 
