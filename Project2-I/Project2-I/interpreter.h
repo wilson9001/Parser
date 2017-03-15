@@ -23,13 +23,17 @@ public:
 
 	void evaluateQueries();
 
-	void answerQuery(predicate queryToAnswer);
+	void answerQuery(predicate &queryToAnswer);
 
-	string queryMapKeyGenerator(predicate queryToStringify);
+	string queryMapKeyGenerator(predicate &queryToStringify);
 
 	void printQueryResults();
 
-	void addQueryParameters(list<parameter> queryParameters);
+	void addQueryParameters(list<parameter> &queryParameters);
+
+	void printTuples(predicate &QueryToFetchResults);
+
+	void printTuple(Tuple tupleToPrint, scheme schemeToPrint);
 
 private:
 	database myDatabase;

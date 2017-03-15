@@ -13,7 +13,7 @@ public:
 	relation(string relationName, list<parameter> parameterList);
 	~relation();
 
-	void addTuple(Tuple newTuple) { relationTuples.insert(newTuple); }
+	void addTuple(Tuple &newTuple) { relationTuples.insert(newTuple); }
 
 	//*Used on internal data in temp relations to answer queries.
 	//*Needs to redo set of tuples to only have ones that qualify with this query.
@@ -35,10 +35,14 @@ public:
 	//relation project();
 	void project();
 
-	Tuple removeTupleColumns(Tuple oldTuple);
+	Tuple removeTupleColumns(Tuple &oldTuple);
 
 	//*Will take vector of projectNames and rename the still existing columns after project to be the appropriate name.
 	void rename();
+
+	set<Tuple> getTuples() { return relationTuples; }
+
+	scheme getScheme() { return relationScheme; }
 
 private:
 	//*Name of this relation

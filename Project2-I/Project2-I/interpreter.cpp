@@ -41,7 +41,7 @@ void interpreter::evaluateQueries()
 	printQueryResults();
 }
 
-void interpreter::answerQuery(predicate queryToAnswer)
+void interpreter::answerQuery(predicate &queryToAnswer)
 {
 	relation tempRelation = myDatabase.getRelation(queryToAnswer.getPredicateName());
 
@@ -82,7 +82,7 @@ void interpreter::answerQuery(predicate queryToAnswer)
 }
 
 //*Turns entire query statement into a string to be used in the map of result relations, and in printing queries in the printResults function.
-string interpreter::queryMapKeyGenerator(predicate queryToStringify)
+string interpreter::queryMapKeyGenerator(predicate &queryToStringify)
 {
 	stringstream keyBuilder;
 
@@ -113,17 +113,27 @@ string interpreter::queryMapKeyGenerator(predicate queryToStringify)
 //get the size of the set of tuples, and then iterate through the set.
 void interpreter::printQueryResults()
 {
-	for (predicate x : queryList)
+	//for (predicate x : queryList)
+	for(auto iter = queryList.begin(); iter != queryList.end(); iter++)
 	{
+
+		/*
 		queryResults << x.getPredicateName() << "(";
 
 		addQueryParameters(x.getPredicateParameters());
 
-		queryResults << ")?";
+		queryResults << ")? ";
+
+		printTuples(x);
+
+		queryResults << endl;
+	*/
 	}
+
+	//cout queryResults after final formatting (remove last endl) here.
 }
 
-void interpreter::addQueryParameters(list<parameter> queryParameters)
+void interpreter::addQueryParameters(list<parameter> &queryParameters)
 {
 	stringstream tempStream;
 
@@ -143,4 +153,60 @@ void interpreter::addQueryParameters(list<parameter> queryParameters)
 	string tempString = tempStream.str();
 
 	 queryResults << tempString.substr(0, tempString.size() - 1);
+}
+
+void interpreter::printTuples(predicate &QueryToFetchResults)
+{
+	relation tempRelation = relationResults[queryMapKeyGenerator(QueryToFetchResults)];
+
+	set<Tuple> tuplesToPrint = tempRelation.getTuples();
+
+	if (tuplesToPrint.size() == 0)
+	{
+		queryResults << "No" << endl;
+		return;
+	}
+
+	queryResults << "Yes(" << tuplesToPrint.size() << ")" << endl;
+
+	scheme tempScheme = tempRelation.getScheme();
+
+	//for (Tuple x : tuplesToPrint)
+
+	//set<Tuple>::iterator iter = tuplesToPrint.begin();
+
+	//for(int i = 0; i < tuplesToPrint.size(); i ++)
+	for(auto it = tuplesToPrint.begin(); it != tuplesToPrint.end(); it++)
+	{
+		//printTuple(x, tempScheme);
+
+		printTuple(*it, tempScheme);
+
+		if (++it != (tuplesToPrint.end()))
+		{
+			queryResults << endl;
+		}
+		it--;
+	}
+	//insert newline here except on last iteration?
+
+	/*
+	for (int i = 0; i < tuplesToPrint.size(); i++)
+	{
+
+	}
+	*/
+}
+
+void interpreter::printTuple(Tuple tupleToPrint, scheme schemeToPrint)
+{
+	for (int i = 0; i < schemeToPrint.size(); i++)
+	{
+		queryResults << schemeToPrint[i] << "='" << tupleToPrint[i] << "'";
+
+		if (i != (schemeToPrint.size() - 1))
+		{
+			queryResults << ", ";
+		}
+	}
 }

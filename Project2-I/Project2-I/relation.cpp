@@ -83,7 +83,7 @@ void relation::project()
 	relationTuples = newSet;
 }
 
-Tuple relation::removeTupleColumns(Tuple oldTuple)
+Tuple relation::removeTupleColumns(Tuple &oldTuple)
 {
 	Tuple newTuple;
 
