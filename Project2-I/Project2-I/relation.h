@@ -11,6 +11,7 @@ class relation
 {
 public:
 	relation(string relationName, list<parameter> parameterList);
+	relation();
 	~relation();
 
 	void addTuple(Tuple &newTuple) { relationTuples.insert(newTuple); }

@@ -12,6 +12,10 @@ relation::relation(string relationName, list<parameter> parameterList)
 	}
 }
 
+relation::relation()
+{
+}
+
 relation::~relation()
 {
 }
@@ -37,7 +41,7 @@ void relation::selectID(string IdString, int positionInTuple)
 {
 	bool newID = true;
 
-	for (int i = 0; i < projectNames.size(); i++)
+	for (size_t i = 0; i < projectNames.size(); i++)
 	{
 		if (projectNames[i] == IdString)
 		{
@@ -81,6 +85,8 @@ void relation::project()
 	}
 
 	relationTuples = newSet;
+
+
 }
 
 Tuple relation::removeTupleColumns(Tuple &oldTuple)
@@ -92,11 +98,14 @@ Tuple relation::removeTupleColumns(Tuple &oldTuple)
 		newTuple.push_back(oldTuple[x]);
 	}
 
+	//Need to remove scheme columns here...
+
 	return newTuple;
 }
 
 void relation::rename()
 {
+	//create scheme outside of rename function, set equal here.
 	for (size_t i = 0; i < relationScheme.size(); i++)
 	{
 		relationScheme[i] = projectNames[i];
