@@ -39,6 +39,8 @@ public:
 
 	void purgeComments();
 
+	datalogProgram getDatalog() { return myProgram; }
+
 private:
 
 	list<token> parsingTokens;

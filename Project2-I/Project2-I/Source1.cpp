@@ -2,6 +2,7 @@
 #include <vector>
 #include "scanner.h"
 #include "parser.h"
+#include "interpreter.h"
 #include <list>
 
 using namespace std;
@@ -20,6 +21,12 @@ int main(/*int size , char* argv[]*/)
 	tokenParser.parse();
 
 	//tokenScanner.printTokens();
+
+	interpreter myInterpreter;
+
+	myInterpreter.createDataBase(tokenParser.getDatalog());
+
+	myInterpreter.evaluateQueries();
 
 	system("pause");
 

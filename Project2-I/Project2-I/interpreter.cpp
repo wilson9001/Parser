@@ -116,18 +116,22 @@ void interpreter::printQueryResults()
 	//for (predicate x : queryList)
 	for(auto iter = queryList.begin(); iter != queryList.end(); iter++)
 	{
-
-		/*
-		queryResults << x.getPredicateName() << "(";
-
-		addQueryParameters(x.getPredicateParameters());
+		//queryResults << x.getPredicateName() << "(";
+		queryResults << (*iter).getPredicateName() << "(";
+		//addQueryParameters(x.getPredicateParameters());
+		addQueryParameters((*iter).getPredicateParameters());
 
 		queryResults << ")? ";
 
-		printTuples(x);
+		//printTuples(x);
+		printTuples(*iter);
 
-		queryResults << endl;
-	*/
+		//queryResults << endl;
+		if (++iter != queryList.end())
+		{
+			queryResults << endl;
+		}
+		iter--;
 	}
 
 	//cout queryResults after final formatting (remove last endl) here.
@@ -202,7 +206,7 @@ void interpreter::printTuple(Tuple tupleToPrint, scheme schemeToPrint)
 {
 	for (int i = 0; i < schemeToPrint.size(); i++)
 	{
-		queryResults << schemeToPrint[i] << "='" << tupleToPrint[i] << "'";
+		queryResults << "  " << schemeToPrint[i] << "='" << tupleToPrint[i] << "'";
 
 		if (i != (schemeToPrint.size() - 1))
 		{
