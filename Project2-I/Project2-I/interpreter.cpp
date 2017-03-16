@@ -119,6 +119,12 @@ void interpreter::printQueryResults()
 	for(auto iter = queryList.begin(); iter != queryList.end(); iter++)
 	{
 		//queryResults << x.getPredicateName() << "(";
+
+		if (iter != queryList.begin())
+		{
+			queryResults << endl;
+		}
+
 		queryResults << (*iter).getPredicateName() << "(";
 		//addQueryParameters(x.getPredicateParameters());
 		addQueryParameters((*iter).getPredicateParameters());
@@ -129,14 +135,19 @@ void interpreter::printQueryResults()
 		printTuples(*iter);
 
 		//queryResults << endl;
-		if (++iter != queryList.end())
+		/////////////////////////////////////////////////////////////
+		/*if (++iter != queryList.end())
 		{
-			queryResults << endl;
+			queryResults << "3\n";
+						//^may need to fix this
 		}
-		iter--;
+		iter--;*/
+		///////////////////////////////////////////////////////////
+		//cout << queryResults.str();
 	}
 
 	//cout queryResults after final formatting (remove last endl) here.
+	cout << queryResults.str();
 }
 
 void interpreter::addQueryParameters(list<parameter> &queryParameters)
@@ -145,6 +156,7 @@ void interpreter::addQueryParameters(list<parameter> &queryParameters)
 
 	for (auto x : queryParameters)
 	{
+		/*
 		switch (x.getParameterType())
 		{
 		case iD:
@@ -155,6 +167,8 @@ void interpreter::addQueryParameters(list<parameter> &queryParameters)
 		default:
 			tempStream << "'" << x.getParameterValue() << "',";
 		}
+		*/
+		tempStream << x.getParameterValue() << ",";
 	}
 	string tempString = tempStream.str();
 
@@ -169,18 +183,21 @@ void interpreter::printTuples(predicate &QueryToFetchResults)
 
 	if (tuplesToPrint.size() == 0)
 	{
-		queryResults << "No" << endl;
+		queryResults << "No" /*<< endl*/;
 		return;
 	}
 
-	queryResults << "Yes(" << tuplesToPrint.size() << ")" << endl;
-
+	queryResults << "Yes(" << tuplesToPrint.size() << ")" /*<< "2\n2"*/;
+	//														//^^ may need to comment this out
 	scheme tempScheme = tempRelation.getScheme();
-
+	if (!tempScheme.empty())
+	{
+		queryResults << endl;
+	}
 	//for (Tuple x : tuplesToPrint)
 
 	//set<Tuple>::iterator iter = tuplesToPrint.begin();
-
+	//queryResults << "2\n2";
 	//for(int i = 0; i < tuplesToPrint.size(); i ++)
 	for(auto it = tuplesToPrint.begin(); it != tuplesToPrint.end(); it++)
 	{
@@ -206,13 +223,14 @@ void interpreter::printTuples(predicate &QueryToFetchResults)
 
 void interpreter::printTuple(Tuple tupleToPrint, scheme schemeToPrint)
 {
+	//queryResults << endl;
 	for (size_t i = 0; i < schemeToPrint.size(); i++)
 	{
-		queryResults << "  " << schemeToPrint[i] << "='" << tupleToPrint[i] << "'";
+		queryResults << "  " << schemeToPrint[i] << "=" << tupleToPrint[i];
 
 		if (i != (schemeToPrint.size() - 1))
 		{
-			queryResults << ", ";
+			queryResults << ",";
 		}
 	}
 }

@@ -99,15 +99,25 @@ Tuple relation::removeTupleColumns(Tuple &oldTuple)
 	}
 
 	//Need to remove scheme columns here...
-
+	//scheme newScheme
 	return newTuple;
 }
 
 void relation::rename()
 {
+	/*
 	//create scheme outside of rename function, set equal here.
 	for (size_t i = 0; i < relationScheme.size(); i++)
 	{
 		relationScheme[i] = projectNames[i];
 	}
+	*/
+	scheme newScheme;
+
+	for (auto x : projectNames)
+	{
+		newScheme.push_back(x);
+	}
+
+	relationScheme = newScheme;
 }

@@ -11,7 +11,7 @@ class scheme :
 {
 public:
 	scheme();
-	scheme(string schemeName);
+	//scheme(string schemeName);
 	~scheme();
 
 private:
