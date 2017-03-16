@@ -10,7 +10,7 @@ interpreter::~interpreter()
 {
 }
 
-void interpreter::createDataBase(datalogProgram & dataLog)
+void interpreter::createDataBase(datalogProgram dataLog)
 {
 	const list<predicate> schemeList = dataLog.getSchemes();
 	//create relations
@@ -125,9 +125,11 @@ void interpreter::printQueryResults()
 			queryResults << endl;
 		}
 
-		queryResults << (*iter).getPredicateName() << "(";
+		predicate tempPredicate = *iter;
+
+		queryResults << tempPredicate.getPredicateName() << "(";
 		//addQueryParameters(x.getPredicateParameters());
-		addQueryParameters((*iter).getPredicateParameters());
+		addQueryParameters(tempPredicate.getPredicateParameters());
 
 		queryResults << ")? ";
 
@@ -150,7 +152,7 @@ void interpreter::printQueryResults()
 	cout << queryResults.str();
 }
 
-void interpreter::addQueryParameters(list<parameter> &queryParameters)
+void interpreter::addQueryParameters(list<parameter> const &queryParameters)
 {
 	stringstream tempStream;
 

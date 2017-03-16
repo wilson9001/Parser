@@ -19,7 +19,7 @@ public:
 
 	//void function(vector<Reltion> const &r)
 
-	void createDataBase(datalogProgram &dataLog);
+	void createDataBase(datalogProgram dataLog);
 
 	void evaluateQueries();
 
@@ -29,7 +29,7 @@ public:
 
 	void printQueryResults();
 
-	void addQueryParameters(list<parameter> &queryParameters);
+	void addQueryParameters(list<parameter> const &queryParameters);
 
 	void printTuples(predicate &QueryToFetchResults);
 
