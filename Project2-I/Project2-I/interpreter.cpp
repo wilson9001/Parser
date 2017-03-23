@@ -31,6 +31,11 @@ void interpreter::createDataBase(datalogProgram dataLog)
 	ruleList = dataLog.getRules();
 }
 
+void interpreter::evaluateRules()
+{
+	cout << "evaluateRules called.";
+}
+
 void interpreter::evaluateQueries()
 {
 	for (predicate x : queryList)

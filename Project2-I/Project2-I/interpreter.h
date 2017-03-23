@@ -21,6 +21,12 @@ public:
 
 	void createDataBase(datalogProgram dataLog);
 
+	/*
+	void evaluateRules()
+	  will need to evaluate each relation in a rule as a query, join results together, rename columns to match existing schema, then union with existing facts in their appropriate schemes. 
+	*/
+	void evaluateRules();
+
 	void evaluateQueries();
 
 	void answerQuery(predicate &queryToAnswer);

@@ -121,3 +121,23 @@ void relation::rename()
 
 	relationScheme = newScheme;
 }
+
+bool relation::joinable(Tuple & tup1, Tuple & tup2, scheme & scheme1, scheme & scheme2)
+{
+
+
+	return false;
+}
+
+void relation::Union(relation & rel1, relation & rel2)
+{
+	if (rel1.getScheme().size() != rel2.getScheme().size())
+	{
+		cout << "Error! The schemes aren't the same size for this union!\n";
+	}
+
+	for (Tuple x : rel2.getTuples())
+	{
+		rel1.addTuple(x);
+	}
+}

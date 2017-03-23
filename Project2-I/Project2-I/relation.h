@@ -45,6 +45,45 @@ public:
 
 	scheme getScheme() { return relationScheme; }
 
+	/*void? join(relation1, relation2)
+	should make new schema and then make a new relation.
+	Then, have a double for-loop 
+		for(rel 1 iterate through tuples in relation 1)
+			for(rel2 iterate through tuples in relation 2)
+				if( joinable(tup1, tup2)
+					returns tuple -- join(tup1, tup2)
+					addjoin -- adds to new relation
+
+
+		return new relation
+	*/
+	void join(relation &rel1, relation &rel2);
+
+	/*
+	tuple join (not same as other function, this takes tuples instead of relations like the other one)
+	
+	join tuples t1 and t2
+	for each name n2 and value v2 in scheme s2 and tuple t2 if the name n2 is not found in scheme s1 add the value v2 to the new tuple
+
+	this will make sure to eliminate duplicate columns before inserting tuples into set 1 of tuples
+	*/
+	Tuple joinTuple(Tuple &t1, Tuple &t2);
+
+	/*joinable if tuple names are same but values are not then they are not joinable, iterate through each if scheme names are same if tuples aren't the same then they aren't joinable */
+	bool joinable(Tuple &tup1, Tuple &tup2, scheme &scheme1, scheme &scheme2);
+
+
+	/*
+	void addJoin (tuple) add to new relation
+	*/
+	void addJoin(relation &newRelation, Tuple &tupleToAdd);
+
+	/*union(rel1, rel2) 
+	for tuples rel2
+		insert into set of tup1
+	*/
+	void Union(relation &rel1, relation &rel2);
+
 private:
 	//*Name of this relation
 	//*Will correspond to name of facts that will become tuples
