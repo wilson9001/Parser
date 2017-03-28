@@ -1,4 +1,5 @@
 #include "relation.h"
+#include <map>
 
 relation::relation(string relationName, list<parameter> parameterList)
 {
@@ -131,13 +132,33 @@ void relation::join(relation & rel1, relation & rel2)
 
 	Create a new relation with the finished scheme.
 	*/
+
+	pair<scheme, vector<pair<int,int>>> newSchemeInfo = makeScheme(rel1.getScheme(), rel2.getScheme());
+
+	//WORK HERE
 }
 
 
-Tuple relation::joinTuple(Tuple & t1, Tuple & t2)
+Tuple relation::joinTuple(Tuple & t1, Tuple & t2, vector<pair<int, int>> &matchingIndex)
 {
-	//WORK HERE
-	return Tuple();
+	map<int, char> columnsToExclude;
+	
+	for (pair<int, int> x : matchingIndex)
+	{
+		columnsToExclude.insert(pair<int, char>(x.second, 'Y'));
+	}
+
+	Tuple newTuple = t1;
+
+	for (size_t i = 0; i < t2.size(); i++)
+	{
+		if (!columnsToExclude.count(i))
+		{
+			newTuple.push_back(t2[i]);
+		}
+	}
+
+	return newTuple;
 }
 
 bool relation::joinable(Tuple & tup1, Tuple & tup2, vector<pair<int, int>> &matchingIndex)
@@ -170,4 +191,30 @@ void relation::Union(relation & rel1, relation & rel2)
 	{
 		rel1.addTuple(x);
 	}
+}
+
+pair<scheme,vector<pair<int,int>>> relation::makeScheme(scheme &scheme1, scheme &scheme2)
+{
+	scheme newScheme = scheme1;
+	vector<pair<int, int>> sharedColumnIndexes;
+	bool uniqueColumn = true;
+
+	for (size_t i = 0; i < scheme2.size(); i++)
+	{
+		for (size_t j = 0; i < scheme1.size(); i++)
+		{
+			if (scheme2[i] == scheme1[j])
+			{
+				sharedColumnIndexes.push_back(pair<int, int>(j, i));
+				uniqueColumn = false;
+			}
+		}
+
+		if (uniqueColumn)
+		{
+			newScheme.push_back(scheme2[i]);
+		}
+	}
+
+	return pair<scheme, vector<pair<int, int>>>(newScheme, sharedColumnIndexes);
 }

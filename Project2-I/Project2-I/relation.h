@@ -66,7 +66,7 @@ public:
 
 	this will make sure to eliminate duplicate columns before inserting tuples into set 1 of tuples
 	*/
-	Tuple joinTuple(Tuple &t1, Tuple &t2);
+	Tuple joinTuple(Tuple &t1, Tuple &t2, vector<pair<int, int>> &matchingIndex);
 
 	/*joinable if tuple names are same but values are not then they are not joinable, iterate through each if scheme names are same if tuples aren't the same then they aren't joinable */
 	bool joinable(Tuple &tup1, Tuple &tup2, vector<pair<int, int>> &matchingIndex);
@@ -82,6 +82,9 @@ public:
 		insert into set of tup1
 	*/
 	void Union(relation &rel1, relation &rel2);
+
+	//Will need to separate the return pair out for use in the next functions in the join.
+	pair<scheme, vector<pair<int, int>>> makeScheme(scheme &scheme1, scheme &scheme2);
 
 private:
 	//*Name of this relation
