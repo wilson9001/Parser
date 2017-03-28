@@ -54,7 +54,6 @@ public:
 					returns tuple -- join(tup1, tup2)
 					addjoin -- adds to new relation
 
-
 		return new relation
 	*/
 	void join(relation &rel1, relation &rel2);
@@ -70,7 +69,7 @@ public:
 	Tuple joinTuple(Tuple &t1, Tuple &t2);
 
 	/*joinable if tuple names are same but values are not then they are not joinable, iterate through each if scheme names are same if tuples aren't the same then they aren't joinable */
-	bool joinable(Tuple &tup1, Tuple &tup2, scheme &scheme1, scheme &scheme2);
+	bool joinable(Tuple &tup1, Tuple &tup2, vector<pair<int, int>> &matchingIndex);
 
 
 	/*

@@ -122,11 +122,41 @@ void relation::rename()
 	relationScheme = newScheme;
 }
 
-bool relation::joinable(Tuple & tup1, Tuple & tup2, scheme & scheme1, scheme & scheme2)
+void relation::join(relation & rel1, relation & rel2)
 {
+	/*
+	Create new schema vector, iterate through schema vectors of relations 1 and then 2. If an ID is already in the new schema, don't add it again. Add a pair of ints corresponding to the index of the ID in the first scheme (which will match the one in the new scheme) and the index of the same ID in the second scheme, into a vector of pairs. If the two relations have no shared ID's, the new vector will hold all of the ID's for the schemes of both 1 and 2; the vector of pairs will be empty. If the schemes have all of the same ID's then the scheme will hold the ID's in the order of the first scheme, and the vector of pairs will be the same size as the scheme, with each relation in a pair.
+	
+	The joinable function will determine if different tuples are joinable. I will need to pass in both the tuples and the scheme of the new relation, and then check to make sure each indexed value matches in both tuples. If this is the case, then it will return true. Otherwise, it will return false.
+
+	Create a new relation with the finished scheme.
+	*/
+}
 
 
-	return false;
+Tuple relation::joinTuple(Tuple & t1, Tuple & t2)
+{
+	//WORK HERE
+	return Tuple();
+}
+
+bool relation::joinable(Tuple & tup1, Tuple & tup2, vector<pair<int, int>> &matchingIndex)
+{
+	/*size_t i = 0; i < matchingIndex.size(); i++*/
+	for (pair<int, int> x : matchingIndex)
+	{
+		if (tup1[x.first] != tup2[x.second])
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
+void relation::addJoin(relation & newRelation, Tuple & tupleToAdd)
+{
+	newRelation.addTuple(tupleToAdd);
 }
 
 void relation::Union(relation & rel1, relation & rel2)
