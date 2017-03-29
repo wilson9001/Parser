@@ -230,7 +230,7 @@ vector<pair<int,int>> relation::makeScheme(scheme &scheme2)
 	for (size_t i = 0; i < scheme2.size(); i++)
 	{
 		uniqueColumn = true;
-		for (size_t j = 0; i < relationScheme.size(); i++)
+		for (size_t j = 0; j < relationScheme.size(); j++)
 		{
 			if (scheme2[i] == relationScheme[j])
 			{
