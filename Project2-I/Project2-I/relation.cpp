@@ -137,7 +137,8 @@ void relation::join(relation relationToJoin, list<parameter> &newScheme)
 
 	relationToJoin.reScheme(newScheme);
 
-	vector<pair<int,int>> sharedColumns = makeScheme(relationToJoin.getScheme());
+	scheme tempScheme = relationToJoin.getScheme();
+	vector<pair<int,int>> sharedColumns = makeScheme(tempScheme);
 
 	//relation newRelation(newSchemeInfo.first);
 
