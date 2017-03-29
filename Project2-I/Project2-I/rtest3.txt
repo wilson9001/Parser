@@ -26,4 +26,3 @@ Queries:
    DeaWoo(A,B,'a',D,Applestrudle)?
    DeaWoo(A,B,'a',D,E)?
    DeaWoo('a','a','a','a','b')?
-1

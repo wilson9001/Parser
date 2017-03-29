@@ -24,4 +24,3 @@ A(a,b,c,d,e) :- A(b,a,c,d,e).
 
 Queries:
 A(a,b,c,d,e)?
-1

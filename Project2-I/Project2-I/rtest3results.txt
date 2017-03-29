@@ -20,4 +20,3 @@ DeaWoo(A,B,'a',D,E)? Yes(4)
   A='a', B='b', D='a', E='b'
   A='a', B='b', D='b', E='a'
 DeaWoo('a','a','a','a','b')? Yes(1)
-1

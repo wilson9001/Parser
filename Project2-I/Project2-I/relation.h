@@ -57,8 +57,8 @@ public:
 
 		return new relation
 	*/
-	//relation1 can be existing tuples in this relation
-	void join(relation &relationToJoin);
+	//relation1 can be existing tuples in this relation, newScheme is new addition to address rescheming of incoming relationToJoin.
+	void join(relation relationToJoin, list<parameter> & newScheme);
 
 	/*
 	tuple join (not same as other function, this takes tuples instead of relations like the other one)

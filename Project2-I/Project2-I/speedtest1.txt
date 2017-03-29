@@ -37,4 +37,3 @@ Transitive('1',P)?
 A('1','2')?
 Symmetric('2','1')?
 SymTran(X,Y)?
-1

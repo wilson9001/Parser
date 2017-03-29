@@ -69,14 +69,16 @@ void interpreter::evaluateRule(rule ruleToEvaluate)
 	relation newRelation = myDatabase.getRelation((ruleToEvaluate.getNextPredicate()).getPredicateName());
 
 	//WORK HERE: NEED TO REDO SCHEME SO THAT THE EXISTING RELATION'S SCHEME IS OVERWRITTEN
-	newRelation.reScheme((ruleToEvaluate.getNextPredicate()).getPredicateParameters());
+	predicate tempPredicate = ruleToEvaluate.getNextPredicate();
+	newRelation.reScheme(tempPredicate.getPredicateParameters());
 
 	ruleToEvaluate.popPredicate();
 	//Can change this to set newRelation equal to existing relation, then update join function to keep joining with new predicate until predicates are empty by performing internal operations. I updated the make new scheme class, but I will need to update the others as well.
 
 	while (ruleToEvaluate.predicatesRemaining() > 0)
-	{
-		newRelation.join(myDatabase.getRelation((ruleToEvaluate.getNextPredicate()).getPredicateName()));
+	{//Need to rescheme incoming predicate before join or first thing in join.
+		tempPredicate = ruleToEvaluate.getNextPredicate();
+		newRelation.join(myDatabase.getRelation(tempPredicate.getPredicateName()), tempPredicate.getPredicateParameters());//Parameterlist added to rescheme incoming relation.
 			//Only need to add 1 relation to join with itself;
 
 		ruleToEvaluate.popPredicate();
