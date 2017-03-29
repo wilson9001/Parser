@@ -29,3 +29,23 @@ void database::addTuples(string relationName, list<parameter> tupleValues)
 
 	relationMap[relationName].addTuple(tempTuple);
 }
+
+void database::Union(string relationName, set<Tuple> tuplesToAdd)
+{
+	for (Tuple x : tuplesToAdd)
+	{
+		relationMap[relationName].addTuple(x);
+	}
+}
+
+size_t database::size()
+{
+	size_t sizeOfDatabase = 0;
+
+	for (auto x : relationMap)
+	{
+		sizeOfDatabase += (x.second.getTuples()).size();
+	}
+
+	return sizeOfDatabase;
+}

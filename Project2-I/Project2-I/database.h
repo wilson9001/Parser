@@ -18,7 +18,11 @@ public:
 
 	void addTuples(string relationName, list<parameter> tupleValues);
 
+	void Union(string relationName, set<Tuple> tuplesToAdd);
+
 	relation getRelation(string relationName) { return relationMap[relationName]; }
+
+	size_t size();
 
 private:
 

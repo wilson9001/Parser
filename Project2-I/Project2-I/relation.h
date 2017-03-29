@@ -6,6 +6,7 @@
 #include "Tuple.h"
 #include <list>
 #include "parameter.h"
+#include "predicate.h"
 
 class relation
 {
@@ -56,7 +57,8 @@ public:
 
 		return new relation
 	*/
-	void join(relation &rel1, relation &rel2);
+	//relation1 can be existing tuples in this relation
+	void join(relation &relationToJoin);
 
 	/*
 	tuple join (not same as other function, this takes tuples instead of relations like the other one)
@@ -66,6 +68,7 @@ public:
 
 	this will make sure to eliminate duplicate columns before inserting tuples into set 1 of tuples
 	*/
+	
 	Tuple joinTuple(Tuple &t1, Tuple &t2, vector<pair<int, int>> &matchingIndex);
 
 	/*joinable if tuple names are same but values are not then they are not joinable, iterate through each if scheme names are same if tuples aren't the same then they aren't joinable */
@@ -84,7 +87,15 @@ public:
 	void Union(relation &rel1, relation &rel2);
 
 	//Will need to separate the return pair out for use in the next functions in the join.
-	pair<scheme, vector<pair<int, int>>> makeScheme(scheme &scheme1, scheme &scheme2);
+	//Scheme1 can be existing scheme of relation object
+	vector<pair<int, int>> makeScheme(scheme &scheme2);
+	//pair<scheme,
+
+	void reScheme(list<parameter> &scheme);
+
+	void fixColumns(predicate &headPredicate);
+
+	void reorderColumns(vector<size_t> &relevantColumnPosition);
 
 private:
 	//*Name of this relation
@@ -92,8 +103,12 @@ private:
 	string relationName;
 	//*Blueprint of tuples that will populate this relation
 	scheme relationScheme;
+	//*Temporary scheme used to reorder scheme when rearranging columns
+	scheme tempScheme;
 	//*Actual instantiations of the relation outlined in the scheme
 	set<Tuple> relationTuples;
+	//*temporary storage for tuples that will replace existing tuples when doing a join or reorder function.
+	set<Tuple> tempTuples;
 	//*Used in temporary relations to answer queries. Used to rename relationScheme.
 	vector<string> projectNames;
 	//*Used in temporary relations to answer queries. Used to reduce Tuples down to specified indexes corresponding with specified columns.

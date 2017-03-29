@@ -21,11 +21,14 @@ public:
 
 	void createDataBase(datalogProgram dataLog);
 
+	void passThroughRules();
 	/*
 	void evaluateRules()
 	  will need to evaluate each relation in a rule as a query, join results together, rename columns to match existing schema, then union with existing facts in their appropriate schemes. 
 	*/
 	void evaluateRules();
+
+	void evaluateRule(rule ruleToEvaluate);
 
 	void evaluateQueries();
 
@@ -46,7 +49,7 @@ private:
 	list<predicate> queryList;
 	list<rule> ruleList;
 	stringstream queryResults;
-
+	size_t passesThroughRules;
 	//Will store relation results in here to make sure all the results are organized properly. Will use existing queryList to order the printing out of them. Key will have to be entire query, since the scheme can be queried in multiple ways, and each way will need their own result relation mapped.
 	unordered_map<string, relation> relationResults;
 };

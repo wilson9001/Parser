@@ -4,6 +4,7 @@ using namespace std;
 
 interpreter::interpreter()
 {
+	passesThroughRules = 0;
 }
 
 interpreter::~interpreter()
@@ -11,7 +12,8 @@ interpreter::~interpreter()
 }
 
 void interpreter::createDataBase(datalogProgram dataLog)
-{
+{//may need to pass by reference...
+
 	const list<predicate> schemeList = dataLog.getSchemes();
 	//create relations
 	for (predicate x : schemeList)
@@ -29,11 +31,59 @@ void interpreter::createDataBase(datalogProgram dataLog)
 	queryList = dataLog.getQueries();
 
 	ruleList = dataLog.getRules();
+
+	passThroughRules();
+}
+
+void interpreter::passThroughRules()
+{
+	size_t previousDBSize;
+
+	do
+	{
+		previousDBSize = myDatabase.size();
+		passesThroughRules++;
+
+		evaluateRules();
+	} while (previousDBSize != myDatabase.size());
 }
 
 void interpreter::evaluateRules()
 {
-	cout << "evaluateRules called.";
+	//cout << "evaluateRules called.";
+
+	for (rule x : ruleList)
+	{
+		evaluateRule(x);
+	}
+}
+
+void interpreter::evaluateRule(rule ruleToEvaluate)
+{//Previously passed by reference.
+
+	/*Repeatedly join relations until there are no more relations to join, then switch columns to match the one in the head predicate. Then after the completed relation is finished, add to existing relation object that matches the scheme.*/
+	predicate headPredicate = ruleToEvaluate.getNextPredicate();
+
+	ruleToEvaluate.popPredicate();
+
+	relation newRelation = myDatabase.getRelation((ruleToEvaluate.getNextPredicate()).getPredicateName());
+
+	//WORK HERE: NEED TO REDO SCHEME SO THAT THE EXISTING RELATION'S SCHEME IS OVERWRITTEN
+	newRelation.reScheme((ruleToEvaluate.getNextPredicate()).getPredicateParameters());
+
+	ruleToEvaluate.popPredicate();
+	//Can change this to set newRelation equal to existing relation, then update join function to keep joining with new predicate until predicates are empty by performing internal operations. I updated the make new scheme class, but I will need to update the others as well.
+
+	while (ruleToEvaluate.predicatesRemaining() > 0)
+	{
+		newRelation.join(myDatabase.getRelation((ruleToEvaluate.getNextPredicate()).getPredicateName()));
+			//Only need to add 1 relation to join with itself;
+
+		ruleToEvaluate.popPredicate();
+	}
+
+	newRelation.fixColumns(headPredicate); //<--this will reorder columns and remove columns not in the head predicate.
+	myDatabase.Union(headPredicate.getPredicateName(), newRelation.getTuples());
 }
 
 void interpreter::evaluateQueries()
@@ -120,6 +170,8 @@ string interpreter::queryMapKeyGenerator(predicate &queryToStringify)
 //get the size of the set of tuples, and then iterate through the set.
 void interpreter::printQueryResults()
 {
+	queryResults << "Schemes populated after " << passesThroughRules << " passes through the Rules.\n";
+
 	//for (predicate x : queryList)
 	for(auto iter = queryList.begin(); iter != queryList.end(); iter++)
 	{

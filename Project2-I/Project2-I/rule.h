@@ -26,6 +26,12 @@ public:
 
 	list<predicate> getRulePredicates() { return predicateList; }
 
+	predicate getNextPredicate() { return predicateList.front(); }
+
+	void popPredicate() { predicateList.pop_front(); }
+
+	size_t predicatesRemaining() { return predicateList.size(); }
+
 private:
 
 	//*First predicate is headpredicate.
