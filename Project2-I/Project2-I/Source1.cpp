@@ -10,7 +10,7 @@ using namespace std;
 int main(/*int size , char* argv[]*/)
 {//							argv[1]
 
-	string filename = "rtest3.txt";
+	string filename = "rtest2.txt";
 
 	scanner tokenScanner(filename);
 
@@ -28,7 +28,7 @@ int main(/*int size , char* argv[]*/)
 
 	myInterpreter.evaluateQueries();
 
-	//system("pause");
+	system("pause");
 
 	return 0;
 }

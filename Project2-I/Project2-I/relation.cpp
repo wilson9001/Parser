@@ -123,7 +123,8 @@ void relation::rename()
 	relationScheme = newScheme;
 }
 
-void relation::join(relation relationToJoin, list<parameter> &newScheme)
+/*relation relationToJoin, list<parameter> &newScheme*/
+void relation::join(relation relationToJoin)
 {
 	/*
 	Create new schema vector, iterate through schema vectors of relations 1 and then 2. If an ID is already in the new schema, don't add it again. Add a pair of ints corresponding to the index of the ID in the first scheme (which will match the one in the new scheme) and the index of the same ID in the second scheme, into a vector of pairs. If the two relations have no shared ID's, the new vector will hold all of the ID's for the schemes of both 1 and 2; the vector of pairs will be empty. If the schemes have all of the same ID's then the scheme will hold the ID's in the order of the first scheme, and the vector of pairs will be the same size as the scheme, with each relation in a pair.
@@ -135,7 +136,7 @@ void relation::join(relation relationToJoin, list<parameter> &newScheme)
 
 	//pair<scheme, vector<pair<int,int>>> newSchemeInfo =
 
-	relationToJoin.reScheme(newScheme);
+	//relationToJoin.reScheme(newScheme);
 
 	scheme tempScheme = relationToJoin.getScheme();
 	vector<pair<int,int>> sharedColumns = makeScheme(tempScheme);

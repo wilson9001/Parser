@@ -58,7 +58,7 @@ public:
 		return new relation
 	*/
 	//relation1 can be existing tuples in this relation, newScheme is new addition to address rescheming of incoming relationToJoin.
-	void join(relation relationToJoin, list<parameter> & newScheme);
+	void join(relation relationToJoin);
 
 	/*NOTES: Rules can have string, supposed to reuse query function?
 	ALso, first tuple needs two spaces, all tuples after that need one.*/
