@@ -68,12 +68,15 @@ void interpreter::evaluateRule(rule ruleToEvaluate)
 
 	/***********relation tempRelation = myDatabase.getRelation((ruleToEvaluate.getNextPredicate()).getPredicateName());*/
 
-	answerQuery(ruleToEvaluate.getNextPredicate());
+	predicate tempPredicate = ruleToEvaluate.getNextPredicate();
+	answerQuery(tempPredicate);
 	/*
 	!!!!!relation newRelation = myDatabase.getRelation((ruleToEvaluate.getNextPredicate()).getPredicateName());
 	*/
 
-	relation newRelation = relationResults[queryMapKeyGenerator(ruleToEvaluate.getNextPredicate())];
+	//predicate tempPredicate = ruleToEvaluate.getNextPredicate();
+	string queryKey = queryMapKeyGenerator(tempPredicate);
+	relation newRelation = relationResults[queryKey];
 	relationResults.clear();
 	//WORK HERE: NEED TO REDO SCHEME SO THAT THE EXISTING RELATION'S SCHEME IS OVERWRITTEN
 	//!!!!!predicate tempPredicate = ruleToEvaluate.getNextPredicate();
@@ -91,9 +94,11 @@ void interpreter::evaluateRule(rule ruleToEvaluate)
 		//list<parameter> tempParameters = tempPredicate.getPredicateParameters();
 		
 		//Rewrite to perform query on incoming relation first, then join.
-		answerQuery(ruleToEvaluate.getNextPredicate());
+		predicate tempPredicate = ruleToEvaluate.getNextPredicate();
+		answerQuery(tempPredicate);
 
-		relation relationToJoin = relationResults[queryMapKeyGenerator(ruleToEvaluate.getNextPredicate())];
+		string mapQuery = queryMapKeyGenerator(tempPredicate);
+		relation relationToJoin = relationResults[mapQuery];
 
 		relationResults.clear();
 
@@ -160,6 +165,7 @@ void interpreter::answerQuery(predicate &queryToAnswer)
 }
 
 //*Turns entire query statement into a string to be used in the map of result relations, and in printing queries in the printResults function.
+//added CONST for experiment
 string interpreter::queryMapKeyGenerator(predicate &queryToStringify)
 {
 	stringstream keyBuilder;
