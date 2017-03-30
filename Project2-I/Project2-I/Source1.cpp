@@ -28,7 +28,7 @@ int main(/*int size , char* argv[]*/)
 
 	myInterpreter.evaluateQueries();
 
-	system("pause");
+	//system("pause");
 
 	return 0;
 }

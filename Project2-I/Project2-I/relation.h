@@ -60,6 +60,12 @@ public:
 	//relation1 can be existing tuples in this relation, newScheme is new addition to address rescheming of incoming relationToJoin.
 	void join(relation relationToJoin, list<parameter> & newScheme);
 
+	/*NOTES: Rules can have string, supposed to reuse query function?
+	ALso, first tuple needs two spaces, all tuples after that need one.*/
+	
+	
+	
+	
 	/*
 	tuple join (not same as other function, this takes tuples instead of relations like the other one)
 	

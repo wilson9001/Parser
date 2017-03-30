@@ -290,6 +290,7 @@ void interpreter::printTuple(Tuple tupleToPrint, scheme schemeToPrint)
 	//queryResults << endl;
 	for (size_t i = 0; i < schemeToPrint.size(); i++)
 	{
+		//Needs to be two spaces for first tuple, one space for each tuple after that.
 		queryResults << "  " << schemeToPrint[i] << "=" << tupleToPrint[i];
 
 		if (i != (schemeToPrint.size() - 1))
