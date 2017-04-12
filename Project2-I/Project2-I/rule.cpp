@@ -6,6 +6,7 @@ using namespace std;
 
 rule::rule()
 {
+	//passes = 0;
 }
 
 rule::rule(list<predicate> predicateList)

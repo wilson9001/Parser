@@ -11,7 +11,7 @@ interpreter::~interpreter()
 {
 }
 
-void interpreter::createDataBase(datalogProgram dataLog)
+void interpreter::createDataBase(datalogProgram &dataLog)
 {//may need to pass by reference...
 
 	const list<predicate> schemeList = dataLog.getSchemes();
@@ -32,72 +32,95 @@ void interpreter::createDataBase(datalogProgram dataLog)
 
 	ruleList = dataLog.getRules();
 
-	passThroughRules();
+	doRules();
+	//passThroughRules();
 }
 
-void interpreter::passThroughRules()
+void interpreter::passThroughRules(set<int> &componentToEvaluate)
 {
 	size_t previousDBSize;
 
+	//this fix point algorithm will need to be moved elsewhere...
 	do
 	{
 		previousDBSize = myDatabase.size();
-		passesThroughRules++;
+		//passesThroughRules++;
 
-		evaluateRules();
+		//This will need to be replaced by the rule optimization and then running the queries
+		evaluateRules(componentToEvaluate);
 	} while (previousDBSize != myDatabase.size());
+	
 }
 
-void interpreter::evaluateRules()
+//previously had no input, used ruleList
+void interpreter::evaluateRules(set<int> &componentToEvaluate)
 {
+	/*
 	createGraphs();
 
 	reverseGraph.DFSForest();
 
+	stack<int> postOrderNumbers = reverseGraph.getPostOrderStack();
+	forwardGraph.setPostOrderStack(postOrderNumbers);
+	forwardGraph.createComponents();
+
+	queue<set<int>> components = forwardGraph.getComponents();
+	
+	//loop
+	while (!components.empty())
+	{
+		set<int> component = components.front();
+		components.pop();
+		*/
+		/*If the set component only has size 1, check to see if the node dependencies includes itself by checking in the dependency set for that node. If yes, then */
+		/*if (component.size() == 1)
+		{
+			if (forwardGraph.selfDependent(component))
+			{
+				evaluateTrivialComponent(*component.begin());
+				continue;
+			}
+		}
+		evaluateComponent(component);
+	}*/
+
+	//endloop
 	//forwardGraph.
 	//This will need to be changed to only evaluate rules in a certain subset of the rules...
-	for (rule x : ruleList)
+	
+	//for (rule x : ruleList)
+	auto iter = ruleList.begin();
+
+	for(int x : componentToEvaluate)
 	{
-		evaluateRule(x);
+		iter = ruleList.begin();
+		advance(iter, x);
+
+		evaluateRule(*iter);
 	}
 }
 
-void interpreter::evaluateRule(rule ruleToEvaluate)
+void interpreter::evaluateRule(rule &ruleToEvaluate)
 {//Previously passed by reference.
-
+	ruleToEvaluate.incrementPasses();
 	/*Repeatedly join relations until there are no more relations to join, then switch columns to match the one in the head predicate. Then after the completed relation is finished, add to existing relation object that matches the scheme.*/
 	predicate headPredicate = ruleToEvaluate.getNextPredicate();
 
 	ruleToEvaluate.popPredicate();
 
-	/***********relation tempRelation = myDatabase.getRelation((ruleToEvaluate.getNextPredicate()).getPredicateName());*/
-
 	predicate tempPredicate = ruleToEvaluate.getNextPredicate();
 	answerQuery(tempPredicate);
-	/*
-	!!!!!relation newRelation = myDatabase.getRelation((ruleToEvaluate.getNextPredicate()).getPredicateName());
-	*/
 
 	//predicate tempPredicate = ruleToEvaluate.getNextPredicate();
 	string queryKey = queryMapKeyGenerator(tempPredicate);
 	relation newRelation = relationResults[queryKey];
 	relationResults.clear();
-	//WORK HERE: NEED TO REDO SCHEME SO THAT THE EXISTING RELATION'S SCHEME IS OVERWRITTEN
-	//!!!!!predicate tempPredicate = ruleToEvaluate.getNextPredicate();
-
-	//!!!list<parameter> parameterList = tempPredicate.getPredicateParameters();
-	//!!!newRelation.reScheme(parameterList);
 
 	ruleToEvaluate.popPredicate();
 	//Can change this to set newRelation equal to existing relation, then update join function to keep joining with new predicate until predicates are empty by performing internal operations. I updated the make new scheme class, but I will need to update the others as well.
 
 	while (ruleToEvaluate.predicatesRemaining() > 0)
-	{//Need to rescheme incoming predicate before join or first thing in join.
-		//!!!tempPredicate = ruleToEvaluate.getNextPredicate();
-		
-		//list<parameter> tempParameters = tempPredicate.getPredicateParameters();
-		
-		//Rewrite to perform query on incoming relation first, then join.
+	{
 		predicate tempPredicate = ruleToEvaluate.getNextPredicate();
 		answerQuery(tempPredicate);
 
@@ -106,8 +129,7 @@ void interpreter::evaluateRule(rule ruleToEvaluate)
 
 		relationResults.clear();
 
-		newRelation.join(relationToJoin);//Parameterlist added to rescheme incoming relation.
-			//Only need to add 1 relation to join with itself;
+		newRelation.join(relationToJoin);
 
 		ruleToEvaluate.popPredicate();
 	}
@@ -201,6 +223,11 @@ string interpreter::queryMapKeyGenerator(predicate &queryToStringify)
 //get the size of the set of tuples, and then iterate through the set.
 void interpreter::printQueryResults()
 {
+	queryResults << forwardGraph.createGraphPrint() << endl << "Rule Evaluation";
+
+
+
+	//DOn't need this anymore...
 	queryResults << "Schemes populated after " << passesThroughRules << " passes through the Rules.\n";
 
 	//for (predicate x : queryList)
@@ -300,7 +327,8 @@ void interpreter::printTuples(predicate &QueryToFetchResults)
 		}
 		*/
 
-		printTuple(*it, tempScheme);
+		auto a = *it;
+		printTuple(a, tempScheme);
 
 		if (++it != (tuplesToPrint.end()))
 		{
@@ -318,7 +346,7 @@ void interpreter::printTuples(predicate &QueryToFetchResults)
 	*/
 }
 
-void interpreter::printTuple(Tuple tupleToPrint, scheme schemeToPrint)
+void interpreter::printTuple(Tuple &tupleToPrint, scheme &schemeToPrint)
 {
 	//queryResults << endl;
 	for (size_t i = 0; i < schemeToPrint.size(); i++)
@@ -365,5 +393,62 @@ void interpreter::createGraphs()
 			}
 		}
 		iIndex++;
+	}
+}
+
+/*void interpreter::evaluateTrivialComponent(int trivialComponent)
+{
+	auto iter = ruleList.begin();
+	advance(iter, trivialComponent);
+	/////////////////////////
+}*/
+
+/*void interpreter::evaluateComponent(set<int> component)
+{
+	auto iter = ruleList.begin();
+
+	for (int x : component)
+	{
+		iter = ruleList.begin();
+		advance(iter, x);
+		evaluateRule(*iter);
+	}
+}*/
+
+void interpreter::doRules()
+{
+	createGraphs();
+
+	reverseGraph.DFSForest();
+
+	stack<int> postOrderNumbers = reverseGraph.getPostOrderStack();
+	forwardGraph.setPostOrderStack(postOrderNumbers);
+	forwardGraph.createComponents();
+
+	queue<set<int>> components = forwardGraph.getComponents();
+
+	//loop
+	while (!components.empty())
+	{
+		passesThroughRules = 0;
+		set<int> component = components.front();
+		components.pop();
+
+		/*If the set component only has size 1, check to see if the node dependencies includes itself by checking in the dependency set for that node. If yes, then */
+		if (component.size() == 1)
+		{
+			if (forwardGraph.selfDependent(component))
+			{
+				auto iter = ruleList.begin();
+				advance(iter, *component.begin());
+				
+				evaluateRule(*iter);
+				passesThroughRules++;
+
+				continue;
+			}
+		}
+		passThroughRules(component);
+		//evaluateComponent(component);
 	}
 }

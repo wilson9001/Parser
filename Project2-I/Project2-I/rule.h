@@ -32,11 +32,16 @@ public:
 
 	size_t predicatesRemaining() { return predicateList.size(); }
 
+	//void incrementPasses() { passes++; }
+
+	//size_t returnPasses() { return passes; }
+
 private:
 
 	//*First predicate is headpredicate.
 	//*Name of headPredicate is name of rule.
 	list<predicate> predicateList;
+	//size_t passes;
 };
 
 #endif

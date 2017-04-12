@@ -24,10 +24,12 @@ public:
 	set<int> getDependencies() { return dependencyEdges; }
 
 	//int getPostFixNumber() { return postFixNumber; }
+	bool isDependency(int dependencyToSeek);
 
 private:
 	set<int> dependencyEdges;
 	bool visited;
+	size_t passes;
 	//int postFixNumber;
 };
 

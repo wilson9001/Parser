@@ -7,6 +7,8 @@
 #include <map>
 #include <stack>
 #include "node.h"
+#include <queue>
+#include <sstream>
 
 using namespace std;
 
@@ -25,8 +27,11 @@ public:
 	void DFSForest();
 	//^ Going to have to create a similar function for SCC's which will call find SCC (similar to DFS) and run rule evaluation on each component it returns.
 
-	//This is similar to DFSForest; it will run makeComponent in a loop, each time checking if there is a new component by evaluating the size of the set afterwards. If the set is empty, then it skips to the next iteration. Check before each call of create component to see if next node has already been visited in order to distinguish between trivial components and no component.
-	void findAndEvaluateComponents();
+	//This is similar to DFSForest; it will run makeComponent in a loop, each time checking if there is a new component by evaluating the size of the set afterwards. If the set is empty, then it skips to the next iteration. Check before each call of create component to see if next node has already been visited in order to distinguish between trivial components and no component.<--Will not work because rules are in interpreter. Need to return all components.
+	//Push component onto stack of components each iteration, return stack.
+	void createComponents();
+
+	queue<set<int>> getComponents() { return componentQueue; }
 
 	//*Checks to see if node has been visited, if not then it does a depth first-search through the node dependencies and marks them visited, affixing a post order number on the way out or pushing them on a stack.
 	//for each node dependency: if not visited, DFS, then push on stack/assign number and return.
@@ -49,15 +54,27 @@ public:
 	//*Should only be used by reverse graph to give to forward graph.
 	stack<int> getPostOrderStack() { return postOrderStack; }
 
+	//*Should only be used in forward graph to receive post order from reverse graph.
+	void setPostOrderStack(stack<int> &postOrderStack) { this->postOrderStack = postOrderStack; }
+
+	bool selfDependent(set<int> &nodeToTest);
+
+	string createGraphPrint();
+
 private:
 
 	//*This map actually holds the rules/nodes of the graph.
 	//*The int key corresponds to the number of the rule (which is represented in the node).
 	map<int, node> nodes;
-	//Used in reverse graphs in place of affixing post-order numbers.
+	//Used in place of post-order numbers. Filled in reverse graph, emptied in forward graph to create components.
 	stack<int> postOrderStack;
 	//Used to store each component as it's created, then evaluated.
 	set<int> component;
+
+	//Used in forward graphs to hold created components.
+	queue<set<int>> componentQueue;
+
+	stringstream graphPrintout;
 };
 
 #endif

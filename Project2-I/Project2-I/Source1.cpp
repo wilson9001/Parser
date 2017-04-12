@@ -24,7 +24,8 @@ int main(/*int size , char* argv[]*/)
 
 	interpreter myInterpreter;
 
-	myInterpreter.createDataBase(tokenParser.getDatalog());
+	datalogProgram myData = tokenParser.getDatalog();
+	myInterpreter.createDataBase(myData);
 
 	myInterpreter.evaluateQueries();
 
