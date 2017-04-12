@@ -10,6 +10,7 @@
 #include <sstream>
 #include <unordered_map>
 #include "relation.h"
+#include "graph.h";
 
 class interpreter
 {
@@ -44,6 +45,8 @@ public:
 
 	void printTuple(Tuple tupleToPrint, scheme schemeToPrint);
 
+	void createGraphs();
+
 private:
 	database myDatabase;
 	list<predicate> queryList;
@@ -52,6 +55,8 @@ private:
 	size_t passesThroughRules;
 	//Will store relation results in here to make sure all the results are organized properly. Will use existing queryList to order the printing out of them. Key will have to be entire query, since the scheme can be queried in multiple ways, and each way will need their own result relation mapped.
 	unordered_map<string, relation> relationResults;
+	graph forwardGraph;
+	graph reverseGraph;
 };
 
 #endif

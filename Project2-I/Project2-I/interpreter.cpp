@@ -50,8 +50,12 @@ void interpreter::passThroughRules()
 
 void interpreter::evaluateRules()
 {
-	//cout << "evaluateRules called.";
+	createGraphs();
 
+	reverseGraph.DFSForest();
+
+	//forwardGraph.
+	//This will need to be changed to only evaluate rules in a certain subset of the rules...
 	for (rule x : ruleList)
 	{
 		evaluateRule(x);
@@ -330,5 +334,36 @@ void interpreter::printTuple(Tuple tupleToPrint, scheme schemeToPrint)
 		{
 			queryResults << ",";
 		}
+	}
+}
+
+void interpreter::createGraphs()
+{
+	forwardGraph.populateGraph(ruleList.size());
+	reverseGraph.populateGraph(ruleList.size());
+
+	//rule x : ruleList
+	size_t iIndex = 0;
+	size_t zIndex = 0;
+
+	for (auto i = ruleList.begin(); i != ruleList.end(); i++)
+	{
+		//list<predicate> tempList = x.getRulePredicates(); <-- may need this
+		for (predicate y : (*i).getRulePredicates()/*x.getRulePredicates()*/)
+		{
+			zIndex = 0;
+			//rule z : ruleList
+			for (auto z = ruleList.begin(); z != ruleList.end(); z++)
+			{
+				if (y.getPredicateName() == (*z).getNextPredicate().getPredicateName())
+				{
+					//Going to have to create an iterator to go through the list of rules later...
+					forwardGraph.addEdge(iIndex, zIndex);
+					reverseGraph.addEdge(zIndex, iIndex);
+				}
+				zIndex++;
+			}
+		}
+		iIndex++;
 	}
 }
