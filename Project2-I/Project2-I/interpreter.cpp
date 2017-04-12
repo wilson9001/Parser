@@ -44,12 +44,16 @@ void interpreter::passThroughRules(set<int> &componentToEvaluate)
 	do
 	{
 		previousDBSize = myDatabase.size();
-		//passesThroughRules++;
+		passesThroughRules++;
 
 		//This will need to be replaced by the rule optimization and then running the queries
 		evaluateRules(componentToEvaluate);
 	} while (previousDBSize != myDatabase.size());
 	
+	for (int x : componentToEvaluate)
+	{
+		ruleResults  << endl << passesThroughRules << " passes: R" << x;
+	}
 }
 
 //previously had no input, used ruleList
@@ -225,11 +229,11 @@ void interpreter::printQueryResults()
 {
 	queryResults << forwardGraph.createGraphPrint() << endl << "Rule Evaluation";
 
-
+	queryResults << ruleResults.str();
 
 	//DOn't need this anymore...
-	queryResults << "Schemes populated after " << passesThroughRules << " passes through the Rules.\n";
-
+	//queryResults << "Schemes populated after " << passesThroughRules << " passes through the Rules.\n";
+	queryResults << "\nQuery Evaluation\n";
 	//for (predicate x : queryList)
 	for(auto iter = queryList.begin(); iter != queryList.end(); iter++)
 	{
@@ -443,8 +447,8 @@ void interpreter::doRules()
 				advance(iter, *component.begin());
 				
 				evaluateRule(*iter);
-				passesThroughRules++;
-
+				//passesThroughRules++;
+				ruleResults << "\n1 passes: R" << *component.begin();
 				continue;
 			}
 		}
