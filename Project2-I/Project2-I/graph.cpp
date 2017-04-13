@@ -128,14 +128,14 @@ string graph::createGraphPrint()
 
 		set<int> dependencies = x.second.getDependencies();
 		
-		if (dependencies.size() == 1)
+		/*if (dependencies.size() == 1)
 		{
 			if(selfDependent(dependencies))
 			{
 				//graphPrintout << endl;
 				continue;
 			}
-		}
+		}*/
 
 		for(auto y = dependencies.begin(); y != dependencies.end(); y++)
 		{
