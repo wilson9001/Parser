@@ -104,9 +104,9 @@ void interpreter::evaluateRules(set<int> &componentToEvaluate)
 	}
 }
 
-void interpreter::evaluateRule(rule &ruleToEvaluate)
+void interpreter::evaluateRule(rule /*&*/ruleToEvaluate)
 {//Previously passed by reference.
-	ruleToEvaluate.incrementPasses();
+//	ruleToEvaluate.incrementPasses();
 	/*Repeatedly join relations until there are no more relations to join, then switch columns to match the one in the head predicate. Then after the completed relation is finished, add to existing relation object that matches the scheme.*/
 	predicate headPredicate = ruleToEvaluate.getNextPredicate();
 
@@ -233,7 +233,7 @@ void interpreter::printQueryResults()
 
 	//DOn't need this anymore...
 	//queryResults << "Schemes populated after " << passesThroughRules << " passes through the Rules.\n";
-	queryResults << "\nQuery Evaluation\n";
+	queryResults << "\n\nQuery Evaluation\n";
 	//for (predicate x : queryList)
 	for(auto iter = queryList.begin(); iter != queryList.end(); iter++)
 	{
@@ -378,25 +378,38 @@ void interpreter::createGraphs()
 	size_t iIndex = 0;
 	size_t zIndex = 0;
 
-	for (auto i = ruleList.begin(); i != ruleList.end(); i++)
+	predicate tempPredicateNameStorage;
+
+	for (auto i = ruleList.begin(); i != ruleList.end(); i++, iIndex++)
 	{
 		//list<predicate> tempList = x.getRulePredicates(); <-- may need this
-		for (predicate y : (*i).getRulePredicates()/*x.getRulePredicates()*/)
+		//remove headpredicate
+		//tempPredicateNameStorage = (*i).getNextPredicate();
+		//(*i).popPredicate();
+		list<predicate> m = (*i).getRulePredicates();
+		auto y = m.begin();
+
+		y++;
+
+		//for (predicate y : (*i).getRulePredicates()/*x.getRulePredicates()*/)
+		for (y ; y != m.end(); y++)
 		{
 			zIndex = 0;
 			//rule z : ruleList
-			for (auto z = ruleList.begin(); z != ruleList.end(); z++)
+			for (auto z = ruleList.begin(); z != ruleList.end(); z++, zIndex++)
 			{
-				if (y.getPredicateName() == (*z).getNextPredicate().getPredicateName())
+				if ((*y).getPredicateName() == (*z).getNextPredicate().getPredicateName())
 				{
 					//Going to have to create an iterator to go through the list of rules later...
 					forwardGraph.addEdge(iIndex, zIndex);
 					reverseGraph.addEdge(zIndex, iIndex);
 				}
-				zIndex++;
+				//zIndex++;
 			}
 		}
-		iIndex++;
+		//re-add headpredicate
+		//(*i).reAddName(tempPredicateNameStorage);
+		//iIndex++;
 	}
 }
 
@@ -441,7 +454,7 @@ void interpreter::doRules()
 		/*If the set component only has size 1, check to see if the node dependencies includes itself by checking in the dependency set for that node. If yes, then */
 		if (component.size() == 1)
 		{
-			if (forwardGraph.selfDependent(component))
+			if (!forwardGraph.selfDependent(component))
 			{
 				auto iter = ruleList.begin();
 				advance(iter, *component.begin());

@@ -10,8 +10,8 @@ using namespace std;
 int main(/*int size , char* argv[]*/)
 {//							argv[1]
 
-	string filename = "rtest3.txt";
-
+	string filename = "otest4.txt";
+	//not self dependent size 1
 	scanner tokenScanner(filename);
 
 	tokenScanner.scan();

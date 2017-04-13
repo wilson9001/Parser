@@ -10,7 +10,7 @@
 #include <sstream>
 #include <unordered_map>
 #include "relation.h"
-#include "graph.h";
+#include "graph.h"
 #include <queue>
 
 class interpreter
@@ -32,7 +32,7 @@ public:
 	void evaluateRules(set<int> &componentToEvaluate);
 
 	//added reference
-	void evaluateRule(rule &ruleToEvaluate);
+	void evaluateRule(rule /*&*/ruleToEvaluate);
 
 	void evaluateQueries();
 

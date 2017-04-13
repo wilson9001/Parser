@@ -2,7 +2,7 @@
 
 graph::graph()
 {
-	cout << "Warning! Default graph constructor is not usable!";
+	//cout << "Warning! Default graph constructor is not usable!";
 }
 
 graph::~graph()
@@ -30,6 +30,7 @@ void graph::createComponents()
 
 		makeComponent(postOrderStack.top());
 		componentQueue.push(component);
+		postOrderStack.pop();
 	}
 }
 
@@ -108,6 +109,15 @@ string graph::createGraphPrint()
 
 		set<int> dependencies = x.second.getDependencies();
 		
+		if (dependencies.size() == 1)
+		{
+			if(selfDependent(dependencies))
+			{
+				//graphPrintout << endl;
+				continue;
+			}
+		}
+
 		for(auto y = dependencies.begin(); y != dependencies.end(); y++)
 		{
 			graphPrintout << "R" << *y;
@@ -117,8 +127,9 @@ string graph::createGraphPrint()
 			}
 			--y;
 		}
-		graphPrintout << endl;
+		//graphPrintout << endl;
 	}
 
+	graphPrintout << endl;
 	return graphPrintout.str();
 }

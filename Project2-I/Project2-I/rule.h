@@ -32,6 +32,7 @@ public:
 
 	size_t predicatesRemaining() { return predicateList.size(); }
 
+	void reAddName(predicate name) { predicateList.push_front(name); }
 	//void incrementPasses() { passes++; }
 
 	//size_t returnPasses() { return passes; }
