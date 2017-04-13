@@ -25,7 +25,7 @@ void graph::createComponents()
 		if (nodes[postOrderStack.top()].checkVisited())
 		{
 			postOrderStack.pop();
-			return;
+			continue;
 		}
 
 		makeComponent(postOrderStack.top());
@@ -52,6 +52,24 @@ void graph::DFS(int startingNode)
 	postOrderStack.push(startingNode);
 }
 
+void graph::findSCC(int startingNode)
+{
+	if (nodes[startingNode].checkVisited())
+	{
+		return;
+	}
+
+	nodes[startingNode].markVisited();
+
+	set<int> nodeDependencies = nodes[startingNode].getDependencies();
+	//for (int i = 0; i < nodeDependencies.size(); i++)
+	for (int x : nodeDependencies)
+	{
+		findSCC(x);
+	}
+	component.insert(startingNode);
+}
+
 void graph::makeComponent(int startingNode)
 {
 	component.clear();
@@ -67,7 +85,8 @@ void graph::makeComponent(int startingNode)
 	//for (int i = 0; i < nodeDependencies.size(); i++)
 	for (int x : nodeDependencies)
 	{
-		DFS(x);
+		//Can't use DFS here. Need to create similar function that inserts into component.
+		findSCC(x);
 	}
 	component.insert(startingNode);
 }

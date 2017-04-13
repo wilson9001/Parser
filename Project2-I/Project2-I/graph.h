@@ -37,7 +37,8 @@ public:
 	//for each node dependency: if not visited, DFS, then push on stack/assign number and return.
 	void DFS(int startingNode);
 	//^Create similar function for find SCC, which will return the component so that the rules can be evaluated it in.
-
+	
+	void findSCC(int startingNode);
 	//Similar to DFS, except populates the component member variable. Rule evaluations should be done on component after each call of this, as this will clear the set to repopulate it.
 	void makeComponent(int startingNode);
 	//vector<rule> reportReachableNodes(rule startingNode);
