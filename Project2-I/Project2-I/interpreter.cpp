@@ -50,9 +50,16 @@ void interpreter::passThroughRules(set<int> &componentToEvaluate)
 		evaluateRules(componentToEvaluate);
 	} while (previousDBSize != myDatabase.size());
 	
-	for (int x : componentToEvaluate)
+	ruleResults << endl << passesThroughRules << " passes: ";
+
+	for (auto x = componentToEvaluate.begin(); x != componentToEvaluate.end(); x++)
 	{
-		ruleResults  << endl << passesThroughRules << " passes: R" << x;
+		ruleResults  << "R" << *x;
+		if (++x != componentToEvaluate.end())
+		{
+			ruleResults << ",";
+		}
+		x--;
 	}
 }
 
